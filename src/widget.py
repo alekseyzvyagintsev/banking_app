@@ -11,4 +11,3 @@ def mask_account_card(account_card: Union[str, int]) -> str:
         result = get_mask_card_number(int(account_card[-16:]))
         return f"{account_card[0:-16]}{result}"
 
-print(mask_account_card("Maestro 1596837868705199"))
