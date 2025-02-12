@@ -10,7 +10,7 @@ def filter_by_state(list_of_dict: Iterable[dict[str, Any]], state: Optional[str]
     return result
 
 
-def sort_by_date(list_of_dict: Iterable[dict[str, Any]], descending: bool=True) -> list[dict[str, Any]]:
+def sort_by_date(list_of_dict: Iterable[dict[str, Any]], descending: bool   =True) -> list[dict[str, Any]]:
     """
     принимает список словарей и необязательный параметр,
     задающий порядок сортировки (по умолчанию — убывание).
