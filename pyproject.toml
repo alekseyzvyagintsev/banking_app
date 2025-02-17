@@ -3,11 +3,12 @@ name = "src"
 version = "0.1.0"
 description = ""
 authors = [
-    {name = "Aleksey Zvyagintsev",email = "alex0236889@yandex.ru        "}
+    {name = "Aleksey Zvyagintsev",email = "alex0236889@yandex.ru"}
 ]
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "pytest (==8.3.4)"
 ]
 
 
