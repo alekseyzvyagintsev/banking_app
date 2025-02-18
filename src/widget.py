@@ -1,4 +1,5 @@
-from curses.ascii import isdigit
+import datetime
+
 from typing import Optional
 
 from src.masks import get_mask_account, get_mask_card_number
@@ -33,16 +34,17 @@ def mask_account_card(account_card: Optional[str] = None) -> str:
 def get_date(date_and_time: Optional[str] = None) -> str:
     """
     принимает на вход строку с датой в формате
-    "2024-03-11T02:26:18.671407"
+    "2024-03-11T02:26:18.671407" (ISO8601)
     и возвращает строку с датой в формате
     "ДД.ММ.ГГГГ"
     """
-    if date_and_time is None:
-        return "Функция принимает на вход строку с датой в формате '2024-03-11T02:26:18.671407'"
-    elif type(date_and_time) != str:
-        return "Функция принимает на вход строку с датой в формате '2024-03-11T02:26:18.671407'"
-    elif "T" not in date_and_time:
-        return "Функция принимает на вход строку с датой в формате '2024-03-11T02:26:18.671407'"
+
+    try:
+        datetime.datetime.strptime(date_and_time, "%Y-%m-%dT%H:%M:%S.%f")
+    except ValueError:
+        return "Ожидается строка в формате '2024-03-11T02:26:18.671407'. Это {date_and_time} не правильный формат"
+    except TypeError:
+        return "Ожидается строка в формате '2024-03-11T02:26:18.671407'. Это {date_and_time} не строка"
     else:
         split_date_and_time = date_and_time.split("T")
         split_date = split_date_and_time[0].split("-")
