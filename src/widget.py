@@ -29,21 +29,6 @@ def mask_account_card(account_card: Optional[str] = None) -> str:
         else:
             return "Номер карты или счета должен быть без пробелов и других симболов после номера."
 
-print(mask_account_card("Maestro 1596837868705199"))
-print(mask_account_card("Счет 64686473678894779589"))
-print(mask_account_card("MasterCard 7158300734726758"))
-print(mask_account_card("Visa Classic 6831982476737658"))
-print(mask_account_card("Visa Platinum 8990922113665229"))
-print(mask_account_card("Visa Gold 5999414228426353"))
-print(mask_account_card("Visa Gold 5999414228426353 "))
-print(mask_account_card("Visa Gold 599941422842635"))
-print(mask_account_card("Visa Gold 59994142284263533"))
-print(mask_account_card(["Visa Gold 5999414228426353"]))
-print(mask_account_card("Счет 64686473678894779589 "))
-print(mask_account_card("Счет 6468647367889477958"))
-print(mask_account_card("Счет 646864736788947795854"))
-print(mask_account_card(["Счет 64686473678894779589"]))
-print(mask_account_card())
 
 def get_date(date_and_time: Optional[str] = None) -> str:
     """
