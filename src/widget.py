@@ -1,3 +1,4 @@
+from curses.ascii import isdigit
 from typing import Optional
 
 from src.masks import get_mask_account, get_mask_card_number
@@ -5,17 +6,39 @@ from src.masks import get_mask_account, get_mask_card_number
 
 def mask_account_card(account_card: Optional[str] = None) -> str:
     """
-    Принимать один аргумент — строку, содержащую тип и номер карты или счета.
+    Принимает один аргумент — строку, содержащую тип и номер карты или счета.
     Возвращать строку с замаскированным номером.
     """
     if account_card is None:
-        return "Принимать один аргумент — строку, содержащую тип и номер карты или счета."
-    elif "Счет" in account_card:
-        result = get_mask_account(int(account_card[-20:]))
-        return f"{account_card[0:-20]}{result}"
+        return "Функция принимает один аргумент — строку, содержащую тип и номер карты или счета."
+    elif type(account_card) != str:
+        return "Функция принимает один аргумент — строку, содержащую тип и номер карты или счета."
     else:
-        result = get_mask_card_number(int(account_card[-16:]))
-        return f"{account_card[0:-16]}{result}"
+        split_account_card = list(account_card.split(" "))
+        if (split_account_card[-1]) != "":
+            if len(split_account_card[-1]) == 20 and len(split_account_card[-1]) == 16:
+                return "Функция принимает один аргумент — строку, содержащую тип и номер карты или счета."
+            elif len(split_account_card[-1]) == 20:
+                result = get_mask_account(int(split_account_card[-1]))
+                return f"{account_card[0:-20]}{result}"
+            elif len(split_account_card[-1]) == 16:
+                result = get_mask_card_number(int(split_account_card[-1]))
+                return f"{account_card[0:-16]}{result}"
+            else:
+                return "Номер карты = 16-ти символам, а счета 20-ти."
+        else:
+            return "Номер карты = 16-ти символам, а счета 20-ти без пробелов и других симболов после номера."
+
+# print(mask_account_card())
+# print(mask_account_card("Visa Gold 5999414228426353"))
+# print(mask_account_card("Visa Gold 599941422842635"))
+# print(mask_account_card("Visa Gold 5999414228426353 "))
+# print(mask_account_card(["Visa Gold 5999414228426353"]))
+#
+# print(mask_account_card("Счет 64686473678894779589"))
+# print(mask_account_card("Счет 64686473678894779589 "))
+# print(mask_account_card("Счет 6468647367889477958"))
+# print(mask_account_card(["Счет 64686473678894779589"]))
 
 
 def get_date(date_and_time: Optional[str] = None) -> str:
@@ -26,7 +49,11 @@ def get_date(date_and_time: Optional[str] = None) -> str:
     "ДД.ММ.ГГГГ"
     """
     if date_and_time is None:
-        return "принимает на вход строку с датой в формате '2024-03-11T02:26:18.671407'"
+        return "Функция принимает на вход строку с датой в формате '2024-03-11T02:26:18.671407'"
+    elif type(date_and_time) != str:
+        return "Функция принимает на вход строку с датой в формате '2024-03-11T02:26:18.671407'"
+    elif "T" not in date_and_time:
+        return "Функция принимает на вход строку с датой в формате '2024-03-11T02:26:18.671407'"
     else:
         split_date_and_time = date_and_time.split("T")
         split_date = split_date_and_time[0].split("-")
