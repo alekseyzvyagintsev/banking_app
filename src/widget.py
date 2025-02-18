@@ -10,9 +10,9 @@ def mask_account_card(account_card: Optional[str] = None) -> str:
     Возвращать строку с замаскированным номером.
     """
     if account_card is None:
-        return "Функция принимает один аргумент — строку, содержащую тип и номер карты или счета."
+        return "Ожидается не пустая строка"
     elif type(account_card) != str:
-        return "Функция принимает один аргумент — строку, содержащую тип и номер карты или счета."
+        return f"Ожидается строка, это ({account_card}) не строка"
     else:
         split_account_card = list(account_card.split(" "))
         if (split_account_card[-1]) != "":
@@ -25,21 +25,25 @@ def mask_account_card(account_card: Optional[str] = None) -> str:
                 result = get_mask_card_number(int(split_account_card[-1]))
                 return f"{account_card[0:-16]}{result}"
             else:
-                return "Номер карты = 16-ти символам, а счета 20-ти."
+                return f"Номер карты = 16-ти символам, а счета 20-ти. Здесь ({account_card}) не правильно"
         else:
-            return "Номер карты = 16-ти символам, а счета 20-ти без пробелов и других симболов после номера."
+            return "Номер карты или счета должен быть без пробелов и других симболов после номера."
 
-# print(mask_account_card())
-# print(mask_account_card("Visa Gold 5999414228426353"))
-# print(mask_account_card("Visa Gold 599941422842635"))
-# print(mask_account_card("Visa Gold 5999414228426353 "))
-# print(mask_account_card(["Visa Gold 5999414228426353"]))
-#
-# print(mask_account_card("Счет 64686473678894779589"))
-# print(mask_account_card("Счет 64686473678894779589 "))
-# print(mask_account_card("Счет 6468647367889477958"))
-# print(mask_account_card(["Счет 64686473678894779589"]))
-
+print(mask_account_card("Maestro 1596837868705199"))
+print(mask_account_card("Счет 64686473678894779589"))
+print(mask_account_card("MasterCard 7158300734726758"))
+print(mask_account_card("Visa Classic 6831982476737658"))
+print(mask_account_card("Visa Platinum 8990922113665229"))
+print(mask_account_card("Visa Gold 5999414228426353"))
+print(mask_account_card("Visa Gold 5999414228426353 "))
+print(mask_account_card("Visa Gold 599941422842635"))
+print(mask_account_card("Visa Gold 59994142284263533"))
+print(mask_account_card(["Visa Gold 5999414228426353"]))
+print(mask_account_card("Счет 64686473678894779589 "))
+print(mask_account_card("Счет 6468647367889477958"))
+print(mask_account_card("Счет 646864736788947795854"))
+print(mask_account_card(["Счет 64686473678894779589"]))
+print(mask_account_card())
 
 def get_date(date_and_time: Optional[str] = None) -> str:
     """
