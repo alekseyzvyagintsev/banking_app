@@ -1,7 +1,7 @@
 ############################################################################
-import pytest
+from typing import Any, Iterable, Optional
 
-from typing import Iterable, Optional, Any
+import pytest
 
 
 def filter_by_state(

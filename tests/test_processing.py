@@ -1,9 +1,10 @@
 #####################################################################
+from typing import Any, Iterable
+
 import pytest
 
-from typing import Iterable, Any
-
 from src.processing import filter_by_state, sort_by_date
+
 
 @pytest.mark.parametrize('value, state, expected', [
     (
