@@ -10,9 +10,8 @@ def mask_account_card(account_card: Optional[str] = None) -> str:
     Принимает один аргумент — строку, содержащую тип и номер карты или счета.
     Возвращать строку с замаскированным номером.
     """
-    if type(account_card) != str:
-        return f"Ожидается строка, это ({account_card}) не строка"
-    else:
+
+    if type(account_card) is str:
         split_account_card = list(account_card.split(" "))
         if (split_account_card[-1]) != "":
             if len(split_account_card[-1]) != 20 and len(split_account_card[-1]) != 16:
@@ -22,9 +21,9 @@ def mask_account_card(account_card: Optional[str] = None) -> str:
                 return f"{account_card[0:-20]}{result}"
             elif len(split_account_card[-1]) == 16:
                 result = get_mask_card_number(int(split_account_card[-1]))
-                return f"{account_card[0:-16]}{result}"
-        else:
-            return "Номер карты или счета должен быть без пробелов и других симболов после номера."
+            return f"{account_card[0:-16]}{result}"
+        return "Номер карты или счета должен быть без пробелов и других симболов после номера."
+    return f"Ожидается строка, это ({account_card}) не строка"
 
 
 def get_date(date_and_time: Optional[str] = None) -> str:
@@ -34,16 +33,17 @@ def get_date(date_and_time: Optional[str] = None) -> str:
     и возвращает строку с датой в формате
     "ДД.ММ.ГГГГ"
     """
+    if type(date_and_time) is str:
+        try:
+            datetime.datetime.strptime(date_and_time, "%Y-%m-%dT%H:%M:%S.%f")
+            split_date_and_time = date_and_time.split("T")
+            split_date = split_date_and_time[0].split("-")
+            return f"{split_date[2]}.{split_date[1]}.{split_date[0]}"
+        except ValueError:
+            return "Ожидается строка в формате '2024-03-11T02:26:18.671407'. Введено не верно, попробуйте ещё раз"
+        except TypeError:
+            return "Ожидается строка в формате '2024-03-11T02:26:18.671407'. Введено не верно, попробуйте ещё раз"
+    return "Ожидается строка в формате '2024-03-11T02:26:18.671407'. Введено не верно, попробуйте ещё раз"
 
-    try:
-        datetime.datetime.strptime(date_and_time, "%Y-%m-%dT%H:%M:%S.%f")
-    except ValueError:
-        return "Ожидается строка в формате '2024-03-11T02:26:18.671407'. Введено не верно, попробуйте ещё раз"
-    except TypeError:
-        return "Ожидается строка в формате '2024-03-11T02:26:18.671407'. Введено не верно, попробуйте ещё раз"
-    else:
-        split_date_and_time = date_and_time.split("T")
-        split_date = split_date_and_time[0].split("-")
-        return f"{split_date[2]}.{split_date[1]}.{split_date[0]}"
 
 ############################################################################

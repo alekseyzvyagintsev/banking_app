@@ -29,4 +29,5 @@ def get_mask_account(account_number: Optional[int] = None) -> str:
     else:
         return f"**{account_number_str[-4:]}"
 
+
 #####################################################################
