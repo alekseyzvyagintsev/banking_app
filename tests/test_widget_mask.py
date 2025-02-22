@@ -20,7 +20,6 @@ from src.widget import mask_account_card
     (11111, "Ожидается строка, это (11111) не строка"),
 
 ])
-
 def test_mask_account_card_if_good_input(value: str, expected: str) -> None:
     assert mask_account_card(value) == expected
 

@@ -8,7 +8,7 @@ def get_mask_card_number(card_number: Optional[int] = None) -> str:
     и выводит замаскированный вариант в формате XXXX XX** **** XXXX
     """
     card_number_str = str(card_number)
-    if type(card_number) is str:
+    if type(card_number) is not int:
         return "Введите 16-ти значное число"
     elif len(card_number_str) != 16:
         return "Введите 16-ти значное число"
@@ -22,7 +22,7 @@ def get_mask_account(account_number: Optional[int] = None) -> str:
     и возвращает маску номера по правилу **XXXX
     """
     account_number_str = str(account_number)
-    if type(account_number) is str:
+    if type(account_number) is not int:
         return "Введите 20-ти значное число"
     elif len(account_number_str) != 20:
         return "Введите 20-ти значное число"

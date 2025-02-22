@@ -60,7 +60,8 @@ def test_filter_by_state_canceled(value: Iterable[dict[str, Any]], state: str, e
         ]
     )
 ])
-def test_filter_by_state_state_executed(value: Iterable[dict[str, Any]], state: str, expected: list[dict[str, Any]]) -> None:
+def test_filter_by_state_state_executed_key_error(value: Iterable[dict[str, Any]], state: str,
+                                                  expected: list[dict[str, Any]]) -> None:
     with pytest.raises(KeyError):
         assert filter_by_state(filter_by_state(value, state)) == expected
 
@@ -82,7 +83,8 @@ def test_filter_by_state_state_executed(value: Iterable[dict[str, Any]], state: 
         ]
     )
 ])
-def test_sort_by_date_revers_true(value: Iterable[dict[str, Any]],  descending: bool, expected: list[dict[str, Any]]) -> None:
+def test_sort_by_date_revers_true(value: Iterable[dict[str, Any]], descending: bool,
+                                  expected: list[dict[str, Any]]) -> None:
     assert sort_by_date(value, descending) == expected
 
 
@@ -103,7 +105,8 @@ def test_sort_by_date_revers_true(value: Iterable[dict[str, Any]],  descending: 
         ]
     )
 ])
-def test_sort_by_date_revers_false(value: Iterable[dict[str, Any]],  descending: bool, expected: list[dict[str, Any]]) -> None:
+def test_sort_by_date_revers_false(value: Iterable[dict[str, Any]], descending: bool,
+                                   expected: list[dict[str, Any]]) -> None:
     assert sort_by_date(value, descending) == expected
 
 
@@ -124,8 +127,8 @@ def test_sort_by_date_revers_false(value: Iterable[dict[str, Any]],  descending:
         ]
     )
 ])
-def test_sort_by_date_revers_true(value: Iterable[dict[str, Any]],  descending: bool, expected: list[dict[str, Any]]) -> None:
+def test_sort_by_date_revers_key_error(value: Iterable[dict[str, Any]], descending: bool,
+                                       expected: list[dict[str, Any]]) -> None:
     with pytest.raises(KeyError):
         assert sort_by_date(value, descending) == expected
-
 #####################################################################
