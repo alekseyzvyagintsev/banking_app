@@ -3,16 +3,18 @@ name = "src"
 version = "0.1.0"
 description = ""
 authors = [
-    {name = "Aleksey Zvyagintsev",email = "alex0236889@yandex.ru        "}
+    {name = "Aleksey Zvyagintsev",email = "alex0236889@yandex.ru"}
 ]
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.12,<4.0"
 dependencies = [
+    "pytest (==8.3.4)",
+    "poetry-core (>=1.0.0,<3.0.0)"
 ]
 
 
 [build-system]
-requires = ["poetry-core>=2.0.0,<3.0.0"]
+requires = ["poetry-core>=1.0.0,<3.0.0"] # Было 2.0.0,<3.0.0
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.group.lint.dependencies]
@@ -25,6 +27,8 @@ mypy = "^1.14.1"
 
 [tool.poetry.group.dev.dependencies]
 requests = "^2.32.3"
+pytest = "^8.3.4"
+pytest-cov = "^6.0.0"
 
 [tool.mypy]
 disallow_untyped_defs = true
