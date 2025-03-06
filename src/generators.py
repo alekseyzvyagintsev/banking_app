@@ -2,31 +2,24 @@ from typing import Any, Iterable, Optional, Generator
 
 
 def filter_by_currency(list_of_actions: Iterable[dict[str, Any]], code: Optional[str] = None
-) -> Generator[dict[str, Any], Any, None]:
-    result: Generator[dict[str, Any], Any, None] = \
-        (currency for currency in list_of_actions if currency['operationAmount']['currency']['code'] == code)
-    return result
+) -> str | Generator[dict[str, Any], Any, None]:
+    if not list_of_actions:
+        return "Список пуст"
+    else:
+        result: Generator[dict[str, Any], Any, None] = \
+            (currency for currency in list_of_actions if currency['operationAmount']['currency']['code'] == code)
+        return result
 
 
 def transaction_descriptions(list_of_actions: Optional[Iterable[dict[str, Any]]] = None) -> Generator[
     Any, str | None, str | None]:
 
     if not list_of_actions:
-        yield 'Список пуст'
+        yield "Список пуст"
     else:
         for action in list_of_actions:
             yield action['description']
 
-
-# def transaction_descriptions(list_of_actions: Iterable[dict[str, Any]],) -> Generator[list[Any], Any, str]:
-#     descriptor_list: Generator[Any, Any, None] = (currency_descript['description']
-#                     for currency_descript in list_of_actions if currency_descript['description'])
-#     try:
-#         while True:
-#             yield list(descriptor_list)
-#
-#     except StopIteration:
-#         return 'Вы достигли конца списка'
 
 def card_number_generator(start: int=1, stop: int=None) -> Generator[str, Any, None]:
     card_numbers_dict = (f"{i[0:4]} {i[4:8]} {i[8:12]} {i[-4:]}" for i in (
@@ -42,12 +35,12 @@ def card_number_generator(start: int=1, stop: int=None) -> Generator[str, Any, N
     # for i in range(2):
     #     print(next(usd_transactions))
 
-if __name__ == '__main__':
-    # from tests.transactions_data import transactions
-
-    descriptions = transaction_descriptions()
-    for _ in range(5):
-        print(next(iter(descriptions)))
+# if __name__ == '__main__':
+#     # from tests.transactions_data import transactions
+#
+#     descriptions = transaction_descriptions()
+#     for _ in range(5):
+#         print(next(iter(descriptions)))
 
 # if __name__ == '__main__':
 #     print(list(card_number_generator(1777, 1782)))
