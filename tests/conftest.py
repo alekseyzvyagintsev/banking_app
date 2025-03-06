@@ -4,7 +4,7 @@ from typing import Any
 
 @pytest.fixture
 def transactions_data() -> list[dict[str, Any]]:
-    return [
+    transactions: list[dict[str, Any]] = [
         {
             "id": 939719570,
             "state": "EXECUTED",
@@ -81,3 +81,4 @@ def transactions_data() -> list[dict[str, Any]]:
             "to": "Счет 14211924144426031657"
         }
     ]
+    return transactions
