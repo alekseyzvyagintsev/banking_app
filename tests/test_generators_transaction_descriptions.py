@@ -1,3 +1,4 @@
+##################################################################################################
 from src.generators import transaction_descriptions
 
 from conftest import transactions_data
@@ -22,5 +23,6 @@ def test_by_empty_list_transaction_descriptions() -> None:
 
     descriptions = transaction_descriptions()
     description = next(descriptions)
-    assert description == 'Список пуст'
+    assert description == "Список пуст"
 
+##################################################################################################
