@@ -1,3 +1,4 @@
+######################################################################################
 from typing import Any, Generator, Iterable, Iterator, Optional
 
 
@@ -58,19 +59,4 @@ def card_number_generator(start: int = 1, stop: int = 9999999999999999) -> Gener
         return card_numbers_list
 
 
-# if __name__ == '__main__':
-#     from tests.transactions_data import transactions
-#
-#     usd_transactions = filter_by_currency(transactions, 'RUB')
-#     for i in range(2):
-#         print(next(usd_transactions))
-
-# if __name__ == '__main__':
-#     # from tests.transactions_data import transactions
-#
-#     descriptions = transaction_descriptions()
-#     for _ in range(5):
-#         print(next(iter(descriptions)))
-
-# if __name__ == '__main__':
-#     print(card_number_generator(6, 6))
+######################################################################################
