@@ -4,7 +4,7 @@ from src.generators import transaction_descriptions
 from conftest import transactions_data
 
 def test_transaction_descriptions(transactions_data) -> None:
-    """Тест волучения описания транзакции"""
+    """Тест волучения описания транзакций"""
     answers = [
         "Перевод организации",
         "Перевод со счета на счет",
@@ -19,10 +19,9 @@ def test_transaction_descriptions(transactions_data) -> None:
 
 
 def test_by_empty_list_transaction_descriptions() -> None:
-    """Тест получения описания транзакции из пустого"""
+    """Тест получения описания транзакции из пустого списка"""
 
     descriptions = transaction_descriptions()
-    description = next(descriptions)
-    assert description == "Список пуст"
+    assert list(descriptions) == []
 
 ##################################################################################################

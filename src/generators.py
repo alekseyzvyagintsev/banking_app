@@ -15,9 +15,9 @@ def filter_by_currency(list_of_actions: Iterable[dict[str, Any]], code: Optional
 
 
 def transaction_descriptions(list_of_actions: Optional[Iterable[dict[str, Any]]] = None) -> Generator[
-    Any, str | None, str | None]:
+    Any, str | None, Iterator[Any] | None]:
     if not list_of_actions:
-        yield "Список пуст"
+        return iter([])  # Пустой итератор для пустого списка
     else:
         for action in list_of_actions:
             yield action['description']
