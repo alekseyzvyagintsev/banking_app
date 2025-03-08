@@ -44,7 +44,7 @@ from src.generators import filter_by_currency
 )
 
 def test_filter_by_usd(transactions_data, code: str, expected: list[dict[str, Any]]) -> None:
-    """Тест generators.filter_by_currency фильтрации списка по типу валюты USD"""
+    """Тест фильтра списка транзакций по типу валюты USD"""
     usd_out = []
     usd_transactions = filter_by_currency(transactions_data, code)
     for _ in range(2):
@@ -92,30 +92,32 @@ def test_filter_by_usd(transactions_data, code: str, expected: list[dict[str, An
 )
 
 def test_filter_by_rub(transactions_data, code: str, expected: list[dict[str, Any]]) -> None:
-    """Тест generators.filter_by_currency фильтрации списка по типу валюты RUB"""
-    transactions = transactions_data
+    """Тест фильтра списка транзакций по типу валюты RUB"""
     rub_out = []
-    rub_transactions = filter_by_currency(transactions, code)
+    rub_transactions = filter_by_currency(transactions_data, code)
     for _ in range(2):
         rub_out.append(next(iter(rub_transactions)))
     print(rub_out)
     assert rub_out == expected
 
 
+@pytest.mark.parametrize("code, expected", [("EUR", []),])
+
+def test_filter_by_eur(transactions_data, code: str, expected: list[dict[str, Any]]) -> None:
+    """Тест фильтра списка транзакций по типу валюты EUR"""
+    # eur_transactions = filter_by_currency(transactions_data, "EUR")
+    assert list(filter_by_currency(transactions_data, "EUR")) == []
+
+
 def test_by_empty_list_filter_by_rub() -> None:
-    """Тест generators.filter_by_currency фильтрации пустого списка по типу валюты RUB"""
-    rub_out = []
-    rub_transactions = filter_by_currency([], "RUB")
-    for _ in range(2):
-        rub_out.append(next(iter(rub_transactions)))
-    print(rub_out)
-    assert rub_out == ['С', 'С']
+    """Тест фильтра пустого списка по типу валюты RUB"""
+
+    assert list(filter_by_currency([], "RUB")) == []
 
 
 def test__by_empty_list_filter_currency() -> None:
-    """Тест generators.filter_by_currency фильтрации пустого списка без передачи типа валюты"""
-    currency_transactions = (filter_by_currency([]))
-    print(currency_transactions)
-    assert currency_transactions == "Список пуст"
+    """Тест фильтра пустого списка без передачи типа валюты"""
+
+    assert list(filter_by_currency([])) == []
 
 ##################################################################################################
