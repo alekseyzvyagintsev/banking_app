@@ -1,9 +1,10 @@
 ##################################################################################################
+from typing import Any
+
 from src.generators import transaction_descriptions
 
-from conftest import transactions_data
 
-def test_transaction_descriptions(transactions_data) -> None:
+def test_transaction_descriptions(transactions_data: list[dict[str, Any]]) -> None:
     """Тест волучения описания транзакций"""
     answers = [
         "Перевод организации",
@@ -23,5 +24,6 @@ def test_by_empty_list_transaction_descriptions() -> None:
 
     descriptions = transaction_descriptions()
     assert list(descriptions) == []
+
 
 ##################################################################################################

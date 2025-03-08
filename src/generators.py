@@ -7,7 +7,7 @@ def filter_by_currency(
     """
     Фильтр списка транзакций по типу валюты.
     На вход принимает список транзакций.
-    На выход отдает список транзакций
+    На выход отдает список транзакций.
     """
     if not list_of_actions:
         return iter([])  # Пустой итератор для пустого списка
@@ -30,33 +30,32 @@ def transaction_descriptions(
     На выход отдает список с описаниями транзакций.
     """
     if not list_of_actions:
-        return iter([])  # Пустой итератор для пустого списка
-    else:
-        for action in list_of_actions:
-            yield action["description"]
+        return None
+    for action in list_of_actions:
+        yield action["description"]
+    return None
 
 
-def card_number_generator(start: int = 1, stop: int = None) -> Generator[str, Any, None] | str:
+def card_number_generator(start: int = 1, stop: int = 9999999999999999) -> Generator[str, Any, None]:
     """
     Простой генератор номеров кредитных карт.
     На вход принимает два числа от 1 до 16-ти знаков.
     На выход отдает список номеров в указанном диапазоне,
     в формате "ХХХХ ХХХХ ХХХХ ХХХХ"
     """
-    if start < stop:
-        if start <= 0:
-            start = 1
-            card_numbers_list = (
-                f"{i[0:4]} {i[4:8]} {i[8:12]} {i[-4:]}" for i in ("{:016d}".format(i) for i in range(start, stop + 1))
-            )
-            return card_numbers_list
-        else:
-            card_numbers_list = (
-                f"{i[0:4]} {i[4:8]} {i[8:12]} {i[-4:]}" for i in ("{:016d}".format(i) for i in range(start, stop + 1))
-            )
-            return card_numbers_list
+    if start < stop and start <= 0:
+        start = 1
+        card_numbers_list = (
+            f"{i[0:4]} {i[4:8]} {i[8:12]} {i[-4:]}" for i in ("{:016d}".format(i) for i in range(start, stop + 1))
+        )
+        return card_numbers_list
+    elif start > stop:
+        raise ValueError("Старт больше чем стоп")
     else:
-        return "Старт больше чем стоп"
+        card_numbers_list = (
+            f"{i[0:4]} {i[4:8]} {i[8:12]} {i[-4:]}" for i in ("{:016d}".format(i) for i in range(start, stop + 1))
+        )
+        return card_numbers_list
 
 
 # if __name__ == '__main__':
