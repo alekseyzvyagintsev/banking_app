@@ -1,38 +1,42 @@
 #######################################################################
 import os
 import time
-from typing import Any, Callable
-
 from functools import wraps
+from typing import Any
 
 
-def log(filename: Any=None) -> Callable:
+def log(filename: Any | None = None) -> Any:
     def decorator(function: Any) -> Any:
         @wraps(function)
         def wrapper(*args: Any, **kwargs: Any) -> Any:
             try:
                 result: Any = function(*args, **kwargs)
-                log_message: str = f"{time.asctime()} {function.__name__} Ok\n"
+                logging_string: str = f"{time.asctime()} {function.__name__} Ok"
             except Exception as e:
                 result = None
-                log_message: str = f"{time.asctime()} {function.__name__} error: {type(e).__name__}. Explanation {e}\n"
+                logging_string: str = (
+                    f"{time.asctime()} {function.__name__} error: {type(e).__name__}. Explanation {e}"
+                )
             if filename:
-                path_to_file = os.path.join(os.path.dirname(os.path.dirname(__file__)),"tests", filename)
+                path_to_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), "tests", filename)
                 with open(path_to_file, "a", encoding="utf-8") as file:
-                    file.write(f"{log_message}\n")
+                    file.write(f"{logging_string}\n")
             else:
-                print(log_message)
+                print(logging_string)
             return result
+
         return wrapper
+
     return decorator
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
+
     @log(filename="mylog.txt")
-    def square():
-        """ Возведение числа в квадрат"""
-        return value ** 2
+    def my_func(value: Any) -> Any:
+        """Возведение числа в квадрат"""
+        return value
 
+    print(my_func())
 
-
-    print(square(0))
+###################################################################################
