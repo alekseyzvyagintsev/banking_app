@@ -1,13 +1,15 @@
 #############################################################################################
+# import json
 import os
-import json
 from typing import Any
-from utils import converting_data_into_a_dict_list
-import requests
 
+import requests
 from dotenv import load_dotenv
 
+from src.utils import converting_data_into_a_dict_list
+
 load_dotenv()
+
 
 def returns_the_transaction_amount(transaction: Any) -> str | float:
     """
@@ -25,20 +27,26 @@ def returns_the_transaction_amount(transaction: Any) -> str | float:
                 return amount
             else:
                 url = "https://api.apilayer.com/exchangerates_data/convert"
+                # token = os.getenv("APILAYER_KEY")
                 token = {"apikey": "2JDgBB9f8ff2txYJySaFPr8dFNMHvfgE"}
+                # print(token)
                 params = {
                     "amount": amount,
                     "from": currency.get("code"),
                     "to": "RUB",
                 }
 
-                response = requests.request("GET", url, headers=token, params=params)
-                result = json.loads(response.text)
+                # response = requests.request("GET", url, headers=token, params=params)
+                response = requests.get(url, headers=token, params=params)
+                result = response.json()
+                # print(result)
                 return result.get("result")
 
         else:
-            return "Ключ 'operationAmount' отсутствует"
+            print("Ключ 'operationAmount' отсутствует")
+            return ""
     else:
+        print("На обработку поступил пустой обьект")
         return ""
 
 
@@ -47,4 +55,6 @@ if __name__ == "__main__":
     operations_list = converting_data_into_a_dict_list(file_with_operations)
     get_amount = returns_the_transaction_amount(operations_list[1])
     print(get_amount)
+
 ############################################################################################
+
