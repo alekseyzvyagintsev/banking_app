@@ -1,3 +1,5 @@
+import json
+import os
 from typing import Any
 
 import pytest
@@ -53,3 +55,11 @@ def transactions_data() -> list[dict[str, Any]]:
         },
     ]
     return transactions
+
+
+@pytest.fixture
+def transactions_from_json() -> list[dict[str, Any]]:
+    data_file: str = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "operations.json")
+    with open(data_file, encoding="utf-8") as json_file:
+        operations_data: list[dict[str, Any]] = json.load(json_file)
+    return operations_data

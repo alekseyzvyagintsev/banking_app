@@ -5,7 +5,7 @@ from functools import wraps
 from typing import Any
 
 
-def log(filename: Any | None = None) -> Any:
+def log(filename: Any) -> Any:
     def decorator(function: Any) -> Any:
         @wraps(function)
         def wrapper(*args: Any, **kwargs: Any) -> Any:

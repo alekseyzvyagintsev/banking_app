@@ -1,5 +1,4 @@
 #############################################################################################
-# import json
 import os
 from typing import Any
 
@@ -11,7 +10,7 @@ from src.utils import converting_data_into_a_dict_list
 load_dotenv()
 
 
-def returns_the_transaction_amount(transaction: Any) -> str | float:
+def returns_the_transaction_amount(transaction: Any) -> Any:
     """
     функция принимает на вход транзакцию и возвращает сумму транзакции (amount) в рублях,
     тип данных — float. Если транзакция была в USD или EUR, происходит обращение к внешнему API
@@ -27,21 +26,16 @@ def returns_the_transaction_amount(transaction: Any) -> str | float:
                 return amount
             else:
                 url = "https://api.apilayer.com/exchangerates_data/convert"
-                # token = os.getenv("APILAYER_KEY")
-                token = {"apikey": "2JDgBB9f8ff2txYJySaFPr8dFNMHvfgE"}
-                # print(token)
+                token = {"apikey": os.getenv("APILAYER_KEY")}
+                # token = {"apikey": "2JDgBB9f8ff2txYJySaFPr8dFNMHvfgE"}
                 params = {
                     "amount": amount,
                     "from": currency.get("code"),
                     "to": "RUB",
                 }
-
-                # response = requests.request("GET", url, headers=token, params=params)
                 response = requests.get(url, headers=token, params=params)
                 result = response.json()
-                # print(result)
                 return result.get("result")
-
         else:
             print("Ключ 'operationAmount' отсутствует")
             return ""
@@ -57,4 +51,3 @@ if __name__ == "__main__":
     print(get_amount)
 
 ############################################################################################
-
