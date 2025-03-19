@@ -39,7 +39,7 @@ def test_decor_log_without_err_in_logfile() -> None:
         assert f"{time.asctime()} my_func Ok\n" in logline
 
 
-def test_decor_log_without_err_in_konsole(capsys: CaptureFixture[str]) -> None:
+def test_decor_log_without_err_in_konsole(capsys: CaptureFixture[str]) -> str | None:
     """
     Тест декоратора на правильность вывода в консоль
     при штатном выполнении декоратора. Если декоратору
