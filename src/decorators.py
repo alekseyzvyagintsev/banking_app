@@ -3,6 +3,7 @@ import os
 import time
 from functools import wraps
 from typing import Any
+from logging_config import logger
 
 
 def log(filename: Any) -> Any:
@@ -28,6 +29,21 @@ def log(filename: Any) -> Any:
         return wrapper
 
     return decorator
+
+
+def log_function_decorator(function: Any) -> Any:
+    @wraps(function)
+    def wrapper(*args: Any, **kwargs: Any) -> Any:
+        try:
+            result_local: Any = function(*args, **kwargs)
+            logger.debug(f"{time.asctime()} {function.__name__} Ok")
+        except Exception as e:
+            result_local: Any = None
+            logger.debug(
+                f"{time.asctime()} {function.__name__} error: {type(e).__name__}. Explanation {e}"
+            )
+        return result_local
+    return wrapper
 
 
 if __name__ == "__main__":
