@@ -1,6 +1,7 @@
 ###########################################################################################
 import json
 import os
+
 from src.logging_utils import logger
 
 
@@ -24,7 +25,7 @@ def converting_data_into_a_dict_list(data_file: int | str | bytes) -> list | Non
                     logger.info(f"Исходящие данные: operations_data={operations_data}")
                     return operations_data
                 else:
-                    logger.error(f"Тип аргумента не является списком.")
+                    logger.error("Тип аргумента не является списком.")
                     return []
             else:
                 logger.warning("Путь не правильный")

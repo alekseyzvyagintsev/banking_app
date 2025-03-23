@@ -1,5 +1,6 @@
 ###########################################################################
 from typing import Optional
+
 from src.logging_masks import logger
 
 
@@ -22,7 +23,7 @@ def get_mask_card_number(card_number: Optional[int] = None) -> str:
     # Проверка длины строки
     if len(card_number_str) != 16:
         logger.warning("Длина строки не равна 16 символам.")
-        return "!= 16. Введите 16-ти значное число"
+        return "Введите 16-ти значное число"
 
     # Форматирование номера карты
     masked_card_number = f"{card_number_str[0:4]} {card_number_str[4:6]}** **** {card_number_str[-4:]}"
@@ -32,14 +33,15 @@ def get_mask_card_number(card_number: Optional[int] = None) -> str:
 
     return masked_card_number
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     # Правильное значение
     print(get_mask_card_number(1234567890123456))  # Должна вернуть замаскированное значение
 
     # Неправильные значения
     print(get_mask_card_number(123))  # Длина меньше 16 символов
     print(get_mask_card_number(12.34))  # Тип не int
-    print(get_mask_card_number(12345678901234562)) # Длина Bolshe 16 символове
+    print(get_mask_card_number(12345678901234562))  # Длина Bolshe 16 символове
 
 
 def get_mask_account(account_number: Optional[int] = None) -> str:
@@ -70,14 +72,13 @@ def get_mask_account(account_number: Optional[int] = None) -> str:
     return f"**{account_number_str[-4:]}"
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Правильное значение
     print(get_mask_account(12345678901234561234))  # Должна вернуть замаскированное значение
 
     # Неправильные значения
     print(get_mask_account(123))  # Длина меньше 16 символов
     print(get_mask_account(12.34))  # Тип не int
-    print(get_mask_account(123456789012345621234)) # Длина Bolshe 16 символове
-
+    print(get_mask_account(123456789012345621234))  # Длина Bolshe 16 символове
 
 #####################################################################
