@@ -1,6 +1,5 @@
 ##################################################################################################
 import os
-from typing import Any
 
 from src.utils import converting_data_into_a_dict_list
 
@@ -15,7 +14,7 @@ expected = {
 }
 
 
-def test_data_converting() -> Any | None:
+def test_data_converting() -> None:
     """
     Тест конвертации json - файла в pyton - обьект
     и на выходе должен быдь правильный словарь
@@ -43,8 +42,8 @@ def test_data_converting_without_file() -> None:
 
 def test_data_converting_not_list() -> None:
     """
-    Тест Тест конвертации json - файла в pyton - обьект
-    На вход подается файл правильного типа но с содержимым которое
+    Тест конвертации json - файла в pyton - обьект
+    На вход подается файл правильного типа, но с содержимым которое
     не преобразуется в список словарей.
     На выходе должен быть пустой список.
     """

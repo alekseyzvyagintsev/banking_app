@@ -13,7 +13,7 @@ def converting_data_into_a_dict_list(data_file: int | str | bytes) -> list | Non
     """
 
     # Регистрация входных данных
-    logger.info(f"Входные данные: data_file={data_file}")
+    logger.info(f"Входные данные: data_file={list(data_file)}")
 
     if data_file:
         try:
