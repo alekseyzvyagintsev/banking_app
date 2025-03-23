@@ -5,7 +5,7 @@ from typing import Any
 import requests
 from dotenv import load_dotenv
 
-from src.utils import converting_data_into_a_dict_list
+from src.utils import converting_data_from_json_to_dict_list
 
 load_dotenv()
 
@@ -34,8 +34,12 @@ def returns_the_transaction_amount(transaction: Any) -> Any:
                     "to": "RUB",
                 }
                 response = requests.get(url, headers=token, params=params)
-                result = response.json()
-                return result.get("result")
+                status_code = response.status_code
+                if status_code == 200:
+                    result = response.json()
+                    return result.get("result")
+                else:
+                    print(f"Site error: {response.reason}")
         else:
             print("Ключ 'operationAmount' отсутствует")
             return ""
@@ -46,7 +50,7 @@ def returns_the_transaction_amount(transaction: Any) -> Any:
 
 if __name__ == "__main__":
     file_with_operations = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "operations.json")
-    operations_list = converting_data_into_a_dict_list(file_with_operations)
+    operations_list = converting_data_from_json_to_dict_list(file_with_operations)
     get_amount: Any = returns_the_transaction_amount(operations_list[1])
     print(get_amount)
 

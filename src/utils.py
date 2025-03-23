@@ -5,7 +5,7 @@ import os
 from src.logging_utils import logger
 
 
-def converting_data_into_a_dict_list(data_file: int | str | bytes) -> list | None:
+def converting_data_from_json_to_dict_list(data_file: int | str | bytes) -> list | None:
     """
     Функцию принимает на вход путь до JSON-файла
     и возвращает список словарей с данными о финансовых транзакциях.
@@ -13,7 +13,7 @@ def converting_data_into_a_dict_list(data_file: int | str | bytes) -> list | Non
     """
 
     # Регистрация входных данных
-    logger.info(f"Входные данные: data_file={list(data_file)}")
+    logger.info(f"Входные данные: data_file={data_file}")
 
     if data_file:
         try:
@@ -39,7 +39,16 @@ def converting_data_into_a_dict_list(data_file: int | str | bytes) -> list | Non
 
 if __name__ == "__main__":
     file_with_operations = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "operations.json")
-    operations_list = converting_data_into_a_dict_list(file_with_operations)
+    operations_list = converting_data_from_json_to_dict_list(file_with_operations)
     print(operations_list)
+
+
+def converting_data_from_csv_to_dict_list():
+    pass
+
+
+def converting_data_from_xlsx_to_dict_list():
+    pass
+
 
 ############################################################################################
