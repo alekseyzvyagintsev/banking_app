@@ -9,6 +9,7 @@ def log(filename: Any) -> Any:
     def decorator(function: Any) -> Any:
         @wraps(function)
         def wrapper(*args: Any, **kwargs: Any) -> Any:
+            logging_string = ""
             try:
                 result: Any = function(*args, **kwargs)
                 logging_string: str = f"{time.asctime()} {function.__name__} Ok"
