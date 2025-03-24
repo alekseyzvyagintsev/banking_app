@@ -42,4 +42,13 @@ if __name__ == "__main__":
     operations_list = converting_data_into_a_dict_list(file_with_operations)
     print(operations_list)
 
+
+def converting_data_from_csv_to_dict_list():
+    pass
+
+
+def converting_data_from_xlsx_to_dict_list():
+    pass
+
+
 ############################################################################################
