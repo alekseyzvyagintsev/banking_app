@@ -8,10 +8,12 @@ authors = [
 readme = "README.md"
 requires-python = ">=3.12,<4.0"
 dependencies = [
-    "pytest (==8.3.4)",
+    "pytest (>=8.3.4)",
     "poetry-core (>=1.0.0,<3.0.0)",
     "dotenv (>=0.9.9,<0.10.0)",
-    "python-dotenv (>=1.0.1,<2.0.0)"
+    "python-dotenv (>=1.0.1,<2.0.0)",
+    "pandas (>=2.2.3,<3.0.0)",
+    "openpyxl (>=3.1.5,<4.0.0)"
 ]
 
 
