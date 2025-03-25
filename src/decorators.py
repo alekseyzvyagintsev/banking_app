@@ -6,6 +6,7 @@ from typing import Any
 
 
 def log(filename: Any) -> Any:
+    """ Декоратор для применения в журналировании любых функций """
     def decorator(function: Any) -> Any:
         @wraps(function)
         def wrapper(*args: Any, **kwargs: Any) -> Any:
