@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
 # Настройка формата сообщений
-formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+formatter = logging.Formatter("%(asctime)s - %(name)s - %(filename)s — %(funcName)s- %(levelname)s - %(message)s")
 
 # Создание обработчика для вывода в консоль
 console_handler = logging.StreamHandler()
