@@ -12,9 +12,10 @@ load_dotenv()
 
 def returns_the_transaction_amount(transaction: Any) -> Any:
     """
-    функция принимает на вход транзакцию и возвращает сумму транзакции (amount) в рублях,
+    Функция принимает на вход транзакцию и возвращает сумму транзакции (amount) в рублях,
     тип данных — float. Если транзакция была в USD или EUR, происходит обращение к внешнему API
     для получения текущего курса валют и конвертации суммы операции в рубли.
+    Для конвертации валюты воспользуйтесь Exchange Rates Data API: https://apilayer.com/exchangerates_data-api.
     """
     operation_amount = transaction.get("operationAmount")
     amount = operation_amount["amount"]

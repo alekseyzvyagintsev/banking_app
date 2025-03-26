@@ -16,6 +16,12 @@ transaction = {
 
 @patch("requests.get")
 def test_api_return_amount(mock_get) -> None:
+    """
+    Реализуйте функцию, которая принимает на вход транзакцию и возвращает сумму транзакции (amount) в рублях,
+    тип данных — float. Если транзакция была в USD или EUR, происходит обращение к внешнему API
+    для получения текущего курса валют и конвертации суммы операции в рубли.
+    Для конвертации валюты воспользуйтесь Exchange Rates Data API: https://apilayer.com/exchangerates_data-api.
+    """
     expected = {
         "success": True,
         "query": {"from": "USD", "to": "RUB", "amount": 8221.37},
