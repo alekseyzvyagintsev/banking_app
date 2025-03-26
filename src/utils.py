@@ -86,7 +86,7 @@ def converting_data_from_csv_to_dict_list(data_file: int | str | bytes) -> list 
 #     print(operations_list[0])
 
 
-def converting_data_from_xlsx_to_dataframe(data_file: int | str | bytes) -> DataFrame | None:
+def converting_data_from_xlsx_to_dataframe(data_file: int | str | bytes) -> list | None:
     """
     Функцию принимает на вход путь до excel-файла
     и возвращает DataFrame с финансовыми транзакциями.
@@ -100,7 +100,7 @@ def converting_data_from_xlsx_to_dataframe(data_file: int | str | bytes) -> Data
             logger.info("Пытаемся открыть файл и получить данные.")
             if os.path.exists(data_file):
                 df = pd.read_excel(data_file)
-                operations_data = df.to_dict(orient='records')
+                operations_data = df.to_dict(orient="records")
                 if isinstance(operations_data, list):
                     logger.info("Полученные данные являются списком.")
                     return operations_data

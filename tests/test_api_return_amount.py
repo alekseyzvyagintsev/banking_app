@@ -3,7 +3,6 @@ from unittest.mock import patch
 
 from src.external_api import returns_the_transaction_amount
 
-
 transaction = {
     "id": 41428829,
     "state": "EXECUTED",
