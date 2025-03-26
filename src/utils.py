@@ -8,7 +8,7 @@ import pandas as pd
 from src.logging_utils import logger
 
 
-def converting_data_from_json_to_a_dict_list(data_file: int | str | bytes) -> list | None:
+def converting_data_from_json_to_dict_list(data_file: int | str | bytes) -> list | None:
     """
     Функцию принимает на вход путь до JSON-файла
     и возвращает список словарей с данными о финансовых транзакциях.
