@@ -35,8 +35,12 @@ def returns_the_transaction_amount(transaction: Any) -> Any:
                     "to": "RUB",
                 }
                 response = requests.get(url, headers=token, params=params)
-                result = response.json()
-                return result.get("result")
+                status_code = response.status_code
+                if status_code == 200:
+                    result = response.json()
+                    return result.get("result")
+                else:
+                    print(f"Site error: {response.reason}")
         else:
             print("Ключ 'operationAmount' отсутствует")
             return ""
