@@ -2,6 +2,8 @@
 import csv
 import json
 import os
+import re
+from typing import Any
 
 import pandas as pd
 
@@ -47,6 +49,7 @@ def converting_data_from_json_to_dict_list(data_file: int | str | bytes) -> list
 #     print(operations_list[0])
 
 
+############################################################################################
 def converting_data_from_csv_to_dict_list(data_file: int | str | bytes) -> list | None:
     """
     Функцию принимает на вход путь до csv-файла
@@ -85,6 +88,7 @@ def converting_data_from_csv_to_dict_list(data_file: int | str | bytes) -> list 
 #     print(operations_list[0])
 
 
+############################################################################################
 def converting_data_from_xlsx_to_dataframe(data_file: int | str | bytes) -> list | None:
     """
     Функцию принимает на вход путь до excel-файла
@@ -123,5 +127,81 @@ if __name__ == "__main__":
 
     # print(operations_list.shape)
     # print(operations_list.head())
+
+
+############################################################################################
+def search_operations(operations_list_for_cearch: list, search_string: str) -> list:
+    """
+    Функция принимает на вход список словарей с данными о банковских операциях
+    и строку поиска, а возвращать список словарей, у которых в описании есть данная строка.
+    """
+    logger.info("Проверяем, является ли список пустым")
+    if operations_list_for_cearch:
+        try:
+            logger.info("Преобразуем строку поиска в регулярное выражение (можно добавить флаг re.IGNORECASE)")
+            pattern = re.compile(search_string, flags=re.IGNORECASE)
+
+            logger.info("Фильтруем операции, где описание соответствует строке поиска")
+            filtered_list = [
+                operation
+                for operation in operations_list_for_cearch
+                if pattern.search(operation.get("description", ""))
+            ]
+
+            return filtered_list
+        except Exception as ex:
+            logger.error(f"Произошла ошибка: {ex}")
+
+    return []
+
+
+if __name__ == "__main__":
+    data = [
+        {"id": 1, "amount": 1000, "description": "Оплата услуг связи"},
+        {"id": 2, "amount": 500, "description": "Покупка продуктов"},
+        {"id": 3, "amount": 2000, "description": "Оплата коммунальных услуг"},
+    ]
+
+    search_result = search_operations(data, "услуг")
+    print(search_result)
+
+
+############################################################################################
+def count_operations_by_category(operations_list_for_count: list, categories_list: list) -> dict[Any] | dict[Any, int]:
+    logger.info("Проверяем, является ли список пустым")
+    if operations_list_for_count:
+        try:
+            logger.info("Создаем словарь для подсчета количества операций по категориям")
+            category_count = {category: 0 for category in categories_list}
+
+            logger.info("Проверяем, содержится ли категория в описании операции")
+            for operation in operations_list_for_count:
+                description = operation.get("description", "")
+
+                for category in categories_list:
+                    if category.lower() in description.lower():
+                        category_count[category] += 1
+                        break
+
+            return category_count
+        except Exception as ex:
+            logger.error(f"Произошла ошибка: {ex}")
+    return {}
+
+
+# Пример использования функции
+if __name__ == "__main__":
+    operations = [
+        {"id": 1, "amount": 1000, "description": "Оплата услуг связи"},
+        {"id": 2, "amount": 500, "description": "Покупка продуктов"},
+        {"id": 3, "amount": 2000, "description": "Оплата коммунальных услуг"},
+        {"id": 4, "amount": 1500, "description": "Покупка одежды"},
+        {"id": 5, "amount": 2500, "description": "Оплата образовательных услуг"},
+    ]
+
+    categories = ["связь", "продукты", "коммунальные услуги", "одежда", "образование"]
+
+    result = count_operations_by_category(operations, categories)
+    print(result)
 
 ############################################################################################
