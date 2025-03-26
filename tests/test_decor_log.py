@@ -1,3 +1,4 @@
+import os
 import time
 from typing import Any
 
@@ -31,7 +32,7 @@ def test_decor_log_without_err_in_logfile() -> None:
     my_func(3)
 
     # Проверяем содержимое log - файла
-    path_to_file = "/home/alex0236889/PycharmProjects/src/tests/mylog.txt"
+    path_to_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), "logs/mylog.txt")
     with open(path_to_file, "r", encoding="utf-8") as file:
         logline = None
         for line in file:
