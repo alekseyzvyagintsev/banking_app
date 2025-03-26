@@ -5,7 +5,7 @@ from typing import Any
 import requests
 from dotenv import load_dotenv
 
-from src.utils import converting_data_from_json_to_dict_list
+from src.utils import get_json_transactions
 
 load_dotenv()
 
@@ -51,7 +51,7 @@ def returns_the_transaction_amount(transaction: Any) -> Any:
 
 if __name__ == "__main__":
     file_with_operations = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "operations.json")
-    operations_list = converting_data_from_json_to_dict_list(file_with_operations)
+    operations_list = get_json_transactions(file_with_operations)
     get_amount: Any = returns_the_transaction_amount(operations_list[1])
     print(get_amount)
 

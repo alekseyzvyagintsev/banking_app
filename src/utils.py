@@ -10,7 +10,7 @@ import pandas as pd
 from src.logging_utils import logger
 
 
-def converting_data_from_json_to_dict_list(data_file: int | str | bytes) -> list | None:
+def get_json_transactions(data_file: int | str | bytes) -> list | None:
     """
     Функцию принимает на вход путь до JSON-файла
     и возвращает список словарей с данными о финансовых транзакциях.
@@ -50,7 +50,7 @@ def converting_data_from_json_to_dict_list(data_file: int | str | bytes) -> list
 
 
 ############################################################################################
-def converting_data_from_csv_to_dict_list(data_file: int | str | bytes) -> list | None:
+def get_csv_transactions(data_file: int | str | bytes) -> list | None:
     """
     Функцию принимает на вход путь до csv-файла
     и возвращает список словарей с данными о финансовых транзакциях.
@@ -89,7 +89,7 @@ def converting_data_from_csv_to_dict_list(data_file: int | str | bytes) -> list 
 
 
 ############################################################################################
-def converting_data_from_xlsx_to_dataframe(data_file: int | str | bytes) -> list | None:
+def get_xlsx_transactions(data_file: int | str | bytes) -> list | None:
     """
     Функцию принимает на вход путь до excel-файла
     и возвращает DataFrame с финансовыми транзакциями.
@@ -122,7 +122,7 @@ def converting_data_from_xlsx_to_dataframe(data_file: int | str | bytes) -> list
 
 if __name__ == "__main__":
     file_with_operations = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data/transactions_excel.xlsx")
-    operations_list = converting_data_from_xlsx_to_dataframe(file_with_operations)
+    operations_list = get_xlsx_transactions(file_with_operations)
     print(operations_list[0])
 
     # print(operations_list.shape)
