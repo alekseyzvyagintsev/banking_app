@@ -43,10 +43,10 @@ def get_json_transactions(data_file: int | str | bytes) -> list | None:
     return []
 
 
-# if __name__ == "__main__":
-#     file_with_operations = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "operations.json")
-#     operations_list = converting_data_from_json_to_a_dict_list(file_with_operations)
-#     print(operations_list[0])
+if __name__ == "__main__":
+    file_with_operations = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "operations.json")
+    operations_list = get_json_transactions(file_with_operations)
+    print(operations_list[0])
 
 
 ############################################################################################
@@ -120,13 +120,10 @@ def get_xlsx_transactions(data_file: int | str | bytes) -> list | None:
     return []
 
 
-if __name__ == "__main__":
-    file_with_operations = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data/transactions_excel.xlsx")
-    operations_list = get_xlsx_transactions(file_with_operations)
-    print(operations_list[0])
-
-    # print(operations_list.shape)
-    # print(operations_list.head())
+# if __name__ == "__main__":
+#     file_with_operations = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data/transactions_excel.xlsx")
+#     operations_list = get_xlsx_transactions(file_with_operations)
+#     print(operations_list[0])
 
 
 ############################################################################################
@@ -194,19 +191,19 @@ def count_operations_by_category(operations_list_for_count: list, categories_lis
     return {}
 
 
-# Пример использования функции
-if __name__ == "__main__":
-    operations = [
-        {"id": 1, "amount": 1000, "description": "Оплата услуг связи"},
-        {"id": 2, "amount": 500, "description": "Покупка продуктов"},
-        {"id": 3, "amount": 2000, "description": "Оплата коммунальных услуг"},
-        {"id": 4, "amount": 1500, "description": "Покупка одежды"},
-        {"id": 5, "amount": 2500, "description": "Оплата образовательных услуг"},
-    ]
-
-    categories = ["связь", "продукты", "коммунальные услуги", "одежда", "образование"]
-
-    result = count_operations_by_category(operations, categories)
-    print(result)
+# # Пример использования функции
+# if __name__ == "__main__":
+#     operations = [
+#         {"id": 1, "amount": 1000, "description": "Оплата услуг связи"},
+#         {"id": 2, "amount": 500, "description": "Покупка продуктов"},
+#         {"id": 3, "amount": 2000, "description": "Оплата коммунальных услуг"},
+#         {"id": 4, "amount": 1500, "description": "Покупка одежды"},
+#         {"id": 5, "amount": 2500, "description": "Оплата образовательных услуг"},
+#     ]
+#
+#     categories = ["связь", "продукты", "коммунальные услуги", "одежда", "образование"]
+#
+#     result = count_operations_by_category(operations, categories)
+#     print(result)
 
 ############################################################################################

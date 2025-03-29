@@ -3,8 +3,8 @@ from typing import Any, Iterable, Optional
 
 
 def filter_by_state(
-    list_of_actions: Iterable[dict[str, Any]], state: Optional[str] = "EXECUTED"
-) -> list[dict[str, Any]]:
+    list_of_actions: list[dict[str, Any]], state: Optional[str] = "EXECUTED"
+) -> list[Any]:
     """
     принимает список словарей и опционально значение для ключа state (по умолчанию 'EXECUTED').
     Функция возвращает новый список словарей, содержащий только те словари, у которых ключ state
@@ -12,9 +12,11 @@ def filter_by_state(
     """
     if not state:
         state = "EXECUTED"
-    result = list(filter(lambda i: i["state"] == state, list_of_actions))
-    return result
-
+    if any(state in dict_from_list.values() for dict_from_list in list_of_actions):
+        result = [d for d in list_of_actions if d.get('state') == state]
+        return result
+    else:
+        return []
 
 def sort_by_date(list_of_actions: Iterable[dict[str, Any]], descending: Optional[bool] = True) -> list[dict[str, Any]]:
     """
