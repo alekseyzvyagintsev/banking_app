@@ -2,7 +2,7 @@
 import os
 from typing import Any
 
-from src.generators import filter_by_currency, transaction_descriptions
+from src.generators import filter_by_currency
 from src.processing import filter_by_state, sort_by_date, filter_by_description
 from src.utils import get_json_transactions, get_xlsx_transactions, get_csv_transactions
 
