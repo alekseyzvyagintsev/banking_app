@@ -43,10 +43,10 @@ def get_json_transactions(data_file: int | str | bytes) -> list | None:
     return []
 
 
-if __name__ == "__main__":
-    file_with_operations = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "operations.json")
-    operations_list = get_json_transactions(file_with_operations)
-    print(operations_list[0])
+# if __name__ == "__main__":
+#     file_with_operations = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "operations.json")
+#     operations_list = get_json_transactions(file_with_operations)
+#     print(operations_list[0])
 
 
 ############################################################################################
@@ -84,7 +84,7 @@ def get_csv_transactions(data_file: int | str | bytes) -> list | None:
 
 # if __name__ == "__main__":
 #     file_with_operations = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data/transactions.csv")
-#     operations_list = converting_data_from_csv_to_dict_list(file_with_operations)
+#     operations_list = get_csv_transactions(file_with_operations)
 #     print(operations_list[0])
 
 
@@ -127,13 +127,13 @@ def get_xlsx_transactions(data_file: int | str | bytes) -> list | None:
 
 
 ############################################################################################
-def search_operations(operations_list_for_cearch: list, search_string: str) -> list:
+def search_operations(operations_list: list, search_string: str) -> list:
     """
     Функция принимает на вход список словарей с данными о банковских операциях
     и строку поиска, а возвращать список словарей, у которых в описании есть данная строка.
     """
     logger.info("Проверяем, является ли список пустым")
-    if operations_list_for_cearch:
+    if operations_list:
         try:
             logger.info("Преобразуем строку поиска в регулярное выражение (можно добавить флаг re.IGNORECASE)")
             pattern = re.compile(search_string, flags=re.IGNORECASE)
@@ -141,7 +141,7 @@ def search_operations(operations_list_for_cearch: list, search_string: str) -> l
             logger.info("Фильтруем операции, где описание соответствует строке поиска")
             filtered_list = [
                 operation
-                for operation in operations_list_for_cearch
+                for operation in operations_list
                 if pattern.search(operation.get("description", ""))
             ]
 
@@ -152,15 +152,15 @@ def search_operations(operations_list_for_cearch: list, search_string: str) -> l
     return []
 
 
-if __name__ == "__main__":
-    data = [
-        {"id": 1, "amount": 1000, "description": "Оплата услуг связи"},
-        {"id": 2, "amount": 500, "description": "Покупка продуктов"},
-        {"id": 3, "amount": 2000, "description": "Оплата коммунальных услуг"},
-    ]
-
-    search_result = search_operations(data, "услуг")
-    print(search_result)
+# if __name__ == "__main__":
+#     data = [
+#         {"id": 1, "amount": 1000, "description": "Оплата услуг связи"},
+#         {"id": 2, "amount": 500, "description": "Покупка продуктов"},
+#         {"id": 3, "amount": 2000, "description": "Оплата коммунальных услуг"},
+#     ]
+#
+#     search_result = search_operations(data, "услуг")
+#     print(search_result)
 
 
 ############################################################################################

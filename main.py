@@ -1,4 +1,4 @@
-############################################################################################################
+###########################################################################################################
 import os
 from typing import Any
 
@@ -26,6 +26,8 @@ files_to_filter = {
 
 statuses = ['EXECUTED', 'CANCELED', 'PENDING']
 
+######################################################################################################
+
 def main():
     filtered_by_state = []
     user_list = []
@@ -47,21 +49,25 @@ def main():
         except ValueError:
             print("Пожалуйста, введите число от 1 до 3.")
 
+######################################################################################################
+
     # Выбираем по какому статусу фильтровать полученный список транзакций.
     while True:
         print("""\nВведите статус, по которому необходимо выполнить фильтрацию. \nДоступные для фильтровки статусы:
-        \nEXECUTED, CANCELED, PENDING""")
-        try:
-            user_choice_state = input().upper()
-            if user_choice_state in statuses:
+        \nEXECUTED, CANCELED, PENDING\n""")
+        user_choice_state = input().upper()
+        if user_choice_state in statuses:
+            try:
                 print(f'\nДля обработки выбран {user_choice_state}')
                 break
-            else:
-                print(f'Статус операции {user_choice_state} недоступен.')
-        except ValueError:
-            print("Пожалуйста, введите один из трёх предложенных статусов.")
+            except ValueError:
+                print("Пожалуйста, введите один из трёх предложенных статусов.")
+        else:
+            print(f'Статус операции {user_choice_state} недоступен.')
 
     path_to_file: str = os.path.join(os.path.dirname(__file__), "data", files_to_filter.get(user_choice_source))
+
+######################################################################################################
 
     # Получаем данные из выбранного файла и фильтруем по выбранному статусу.
     try:
@@ -72,22 +78,24 @@ def main():
     except Exception as ex:
         print(f'Возникла ошибка: {ex}')
 
+######################################################################################################
+
     if user_list:
         print(f'Операции отфильтрованы по статусу "{user_choice_state}"\n')
 
         while True:
             # Выбираем фильтровать по дате или нет.
             print('Отсортировать операции по дате? Да/Нет')
-            try:
-                user_choice_for_sort = (input()).lower()
-                if user_choice_for_sort == 'да' or user_choice_for_sort == 'нет':
-                    if user_choice_for_sort == 'да':
+            user_choice_for_sort = (input()).lower()
+            if user_choice_for_sort == 'да' or user_choice_for_sort == 'нет':
+                if user_choice_for_sort == 'да':
+                    try:
                         while True:
                             # Сортируем по убыванию или возрастанию.
                             print('Отсортировать по возрастанию или по убыванию?')
                             user_choice_sort_up_or_down = (input()).lower()
                             if (user_choice_sort_up_or_down == 'по возрастанию'
-                                or user_choice_sort_up_or_down == 'по возрастанию'):
+                                or user_choice_sort_up_or_down == 'по убыванию'):
                                 try:
                                     if user_choice_sort_up_or_down == 'по возрастанию':
                                         sorted_by_date: list[dict[str, Any]] = (
@@ -103,46 +111,55 @@ def main():
                                     break
                             else:
                                 print('Можно выбрать только: по возрастанию / по убыванию')
+                    except UnicodeDecodeError:
+                        print('Переключите раскладку и попробуйте снова')
+                    break
+                else:
+                    break
+            else:
+                print('Можно выбрать только: Да/Нет')
+
+        ###################################################################################################
+
+        if user_list:
+            while True:
+                # Выбираем в какой валюте выводить транзакции.
+                print('Выводить только рублевые транзакции? Да/Нет')
+                user_choice_currency_code = (input()).lower()
+
+                if user_choice_currency_code == 'да' or user_choice_currency_code == 'нет':
+                    try:
+                        if user_choice_currency_code == 'да':
+                            filtered_by_currency = filter_by_currency(user_list, 'RUB')
+                            user_list = filtered_by_currency
+                            break
+                    except Exception as ex:
+                        print(f'Возникла ошибка: {ex}')
                         break
                     break
                 else:
                     print('Можно выбрать только: Да/Нет')
-            except UnicodeDecodeError:
-                print('Переключите раскладку и попробуйте снова')
 
+        ###################################################################################################
 
-        while True:
-            # Выбираем в какой валюте выводить транзакции.
-            print('Выводить только рублевые транзакции? Да/Нет')
-            user_choice_currency_code = (input()).lower()
+        if user_list:
+            while True:
+                # Выбираем фильтровать ли список по описанию.
+                print('Отфильтровать список транзакций по определенному слову в описании? Да/Нет')
+                user_choice_filter_by_descriptions = (input()).lower()
 
-            if user_choice_currency_code == 'да' or user_choice_currency_code == 'нет':
-                try:
-                    if user_choice_currency_code == 'да':
-                        filtered_by_currency = filter_by_currency(user_list, 'RUB')
-                        user_list = filtered_by_currency
+                if user_choice_filter_by_descriptions == 'да' or user_choice_filter_by_descriptions == 'нет':
+                    if user_choice_filter_by_descriptions == 'да':
+                        user_string = input('Введите слово для поиска транзакций: ').lower()
+                        filtered_by_description = filter_by_description(user_list, search_string=user_string)
+                        user_list = filtered_by_description
                         break
-                except Exception as ex:
-                    print(f'Возникла ошибка: {ex}')
-                    break
-                break
-            else:
-                print('Можно выбрать только: Да/Нет')
+                    else:
+                        break
+                else:
+                    print('Можно выбрать только: Да/Нет')
 
-        while True:
-            # Выбираем фильтровать ли список по описанию.
-            print('Отфильтровать список транзакций по определенному слову в описании? Да/Нет')
-            user_choice_filter_by_descriptions = (input()).lower()
-
-            if user_choice_filter_by_descriptions == 'да' or user_choice_filter_by_descriptions == 'нет':
-                if user_choice_filter_by_descriptions == 'да':
-                    user_word = input('Введите слово для поиска транзакций: ').lower()
-                    filtered_by_description = filter_by_description(user_list, search_word=user_word)
-                    user_list = filtered_by_description
-                    break
-                break
-            else:
-                print('Можно выбрать только: Да/Нет')
+        ###################################################################################################
 
         # Распечатываем итоговый список.
         print('Распечатываю итоговый список транзакций...')
@@ -150,6 +167,8 @@ def main():
     else:
         print(f'С выбранным статусом ({user_choice_state}) ничего не найдено.')
         print(list(user_list))
+
+###########################################################################################################
 
 if __name__ == "__main__":
     main()
