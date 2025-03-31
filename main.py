@@ -28,7 +28,6 @@ statuses = ['EXECUTED', 'CANCELED', 'PENDING']
 
 def main():
     filtered_by_state = []
-    sorted_by_date = []
     user_list = []
     print("Привет! Добро пожаловать в программу работы с банковскими транзакциями.")
 
@@ -73,42 +72,74 @@ def main():
     except Exception as ex:
         print(f'Возникла ошибка: {ex}')
 
-    print(f'\nОперации отфильтрованы по статусу "{user_choice_state}"\n')
+    if user_list:
+        print(f'Операции отфильтрованы по статусу "{user_choice_state}"\n')
 
-    # Выбираем фильтровать по дате или нет.
-    print('Отсортировать операции по дате? Да/Нет')
-    user_choice_for_sort = (input()).lower()
-    if user_choice_for_sort == 'да':
+        while True:
+            # Выбираем фильтровать по дате или нет.
+            print('Отсортировать операции по дате? Да/Нет')
+            user_choice_for_sort = (input()).lower()
+            if user_choice_for_sort == 'да' or user_choice_for_sort == 'нет':
+                if user_choice_for_sort == 'да':
+                    while True:
+                        # Сортируем по убыванию или возрастанию.
+                        print('Отсортировать по возрастанию или по убыванию?')
+                        try:
+                            user_choice_sort_up_or_down = (input()).lower()
+                            if user_choice_sort_up_or_down == 'по возрастанию':
+                                sorted_by_date: list[dict[str, Any]] = sort_by_date(filtered_by_state, False)
+                                user_list = sorted_by_date
+                                break
+                            else:
+                                sorted_by_date: list[dict[str, Any]] = sort_by_date(filtered_by_state)
+                                user_list = sorted_by_date
+                                break
+                        except Exception as ex:
+                            print(f'Возникла ошибка: {ex}')
+                            break
+                    break
+                break
+            else:
+                print('Можно выбрать только: Да/Нет')
 
-        # Сортируем по убыванию или возрастанию.
-        print('Отсортировать по возрастанию или по убыванию?')
-        user_choice_sort_up_or_down = (input()).lower()
-        if user_choice_sort_up_or_down == 'по возрастанию':
-            sorted_by_date: list[dict[str, Any]] = sort_by_date(filtered_by_state, False)
-            user_list = sorted_by_date
-        else:
-            sorted_by_date: list[dict[str, Any]] = sort_by_date(filtered_by_state)
-            user_list = sorted_by_date
+        while True:
+            # Выбираем в какой валюте выводить транзакции.
+            print('Выводить только рублевые транзакции? Да/Нет')
+            user_choice_currency_code = (input()).lower()
 
-    # Выбираем в какой валюте выводить транзакции.
-    print('Выводить только рублевые транзакции? Да/Нет')
-    user_choice_currency_code = (input()).lower()
+            if user_choice_currency_code == 'да' or user_choice_currency_code == 'нет':
+                try:
+                    if user_choice_currency_code == 'да':
+                        filtered_by_currency = filter_by_currency(user_list, 'RUB')
+                        user_list = filtered_by_currency
+                        break
+                except Exception as ex:
+                    print(f'Возникла ошибка: {ex}')
+                    break
+                break
+            else:
+                print('Можно выбрать только: Да/Нет')
 
-    if user_choice_currency_code == 'да':
-        filtered_by_currency = filter_by_currency(user_list, 'RUB')
-        user_list = filtered_by_currency
+        while True:
+            # Выбираем фильтровать ли список по описанию.
+            print('Отфильтровать список транзакций по определенному слову в описании? Да/Нет')
+            user_choice_filter_by_descriptions = (input()).lower()
 
-    # Выбираем фильтровать ли список по описанию.
-    print('Отфильтровать список транзакций по определенному слову в описании? Да/Нет')
-    user_choice_filter_by_descriptions = (input()).lower()
+            if user_choice_filter_by_descriptions == 'да' or user_choice_filter_by_descriptions == 'нет':
+                if user_choice_filter_by_descriptions == 'да':
+                    sorted_by_descriptions = transaction_descriptions(user_list)
+                    user_list = sorted_by_descriptions
+                    break
+                break
+            else:
+                print('Можно выбрать только: Да/Нет')
 
-    if user_choice_filter_by_descriptions == 'да':
-        sorted_by_descriptions = transaction_descriptions(user_list)
-        user_list = sorted_by_descriptions
-
-    # Распечатываем итоговый список.
-    print('Распечатываю итоговый список транзакций...')
-    print(list(user_list))
+        # Распечатываем итоговый список.
+        print('Распечатываю итоговый список транзакций...')
+        print(list(user_list))
+    else:
+        print(f'С выбранным статусом ({user_choice_state}) ничего не найдено.')
+        print(list(user_list))
 
 if __name__ == "__main__":
     main()
