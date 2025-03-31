@@ -12,7 +12,7 @@ def filter_by_currency(
     """
 
     def find_currency_in_transaction(transaction):
-        """ Рекурсивная функция для поиска валюты в словаре транзакции. """
+        """Рекурсивная функция для поиска валюты в словаре транзакции."""
         stack = [transaction]
 
         while stack:
@@ -28,8 +28,7 @@ def filter_by_currency(
 
         return False
 
-    filtered_list = [transaction for transaction in list_of_actions
-                     if find_currency_in_transaction(transaction)]
+    filtered_list = [transaction for transaction in list_of_actions if find_currency_in_transaction(transaction)]
     return list(filtered_list)
 
 
