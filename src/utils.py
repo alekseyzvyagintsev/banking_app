@@ -7,6 +7,7 @@ from typing import Any
 
 import pandas as pd
 
+from collections import Counter
 from src.logging_utils import logger
 
 
@@ -169,39 +170,40 @@ def count_operations_by_category(operations_list_for_count: list, categories_lis
     в каждой категории. Категории операций хранятся в поле description.
     """
     logger.info("Проверяем, является ли список пустым")
-    if operations_list_for_count:
-        try:
-            logger.info("Создаем словарь для подсчета количества операций по категориям")
-            category_count = {category: 0 for category in categories_list}
+    if not operations_list_for_count:
+        return {}
 
-            logger.info("Проверяем, содержится ли категория в описании операции")
-            for operation in operations_list_for_count:
-                description = operation.get("description", "")
+    logger.info('Инициализируем счетчик для категорий')
+    category_counter = Counter()
 
-                for category in categories_list:
-                    if category.lower() in description.lower():
-                        category_count[category] += 1
-                        break
+    try:
+        logger.info('Проходим по каждому описанию операции и ищем соответствие с категориями')
+        for operation in operations_list_for_count:
+            description = operation.get("description", "").lower()
 
-            return category_count
-        except Exception as ex:
-            logger.error(f"Произошла ошибка: {ex}")
-    return {}
+            matched_categories = [category for category in categories_list if category.lower() in description]
+
+            logger.info('Увеличиваем счетчики для найденных категорий')
+            for category in matched_categories:
+                category_counter.update({category: 1})
+
+        return dict(category_counter)
+    except Exception as ex:
+        logger.error(f"Произошла ошибка: {ex}")
 
 
 # # Пример использования функции
 # if __name__ == "__main__":
-#     operations = [
-#         {"id": 1, "amount": 1000, "description": "Оплата услуг связи"},
-#         {"id": 2, "amount": 500, "description": "Покупка продуктов"},
-#         {"id": 3, "amount": 2000, "description": "Оплата коммунальных услуг"},
-#         {"id": 4, "amount": 1500, "description": "Покупка одежды"},
-#         {"id": 5, "amount": 2500, "description": "Оплата образовательных услуг"},
+#     operations_list = [
+#         {"description": "Оплата коммунальных услуг"},
+#         {"description": "Пополнение счета"},
+#         {"description": "Перевод средств на карту"},
+#         {"description": "Оплата услуг связи"}
 #     ]
 #
-#     categories = ["связь", "продукты", "коммунальные услуги", "одежда", "образование"]
+#     categories = ["оплата", "перевод", "пополнение"]
 #
-#     result = count_operations_by_category(operations, categories)
+#     result = count_operations_by_category(operations_list, categories)
 #     print(result)
 
 ############################################################################################
