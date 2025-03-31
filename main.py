@@ -3,7 +3,7 @@ import os
 from typing import Any
 
 from src.generators import filter_by_currency, transaction_descriptions
-from src.processing import filter_by_state, sort_by_date
+from src.processing import filter_by_state, sort_by_date, filter_by_description
 from src.utils import get_json_transactions, get_xlsx_transactions, get_csv_transactions
 
 menu_options = {
@@ -78,29 +78,38 @@ def main():
         while True:
             # Выбираем фильтровать по дате или нет.
             print('Отсортировать операции по дате? Да/Нет')
-            user_choice_for_sort = (input()).lower()
-            if user_choice_for_sort == 'да' or user_choice_for_sort == 'нет':
-                if user_choice_for_sort == 'да':
-                    while True:
-                        # Сортируем по убыванию или возрастанию.
-                        print('Отсортировать по возрастанию или по убыванию?')
-                        try:
+            try:
+                user_choice_for_sort = (input()).lower()
+                if user_choice_for_sort == 'да' or user_choice_for_sort == 'нет':
+                    if user_choice_for_sort == 'да':
+                        while True:
+                            # Сортируем по убыванию или возрастанию.
+                            print('Отсортировать по возрастанию или по убыванию?')
                             user_choice_sort_up_or_down = (input()).lower()
-                            if user_choice_sort_up_or_down == 'по возрастанию':
-                                sorted_by_date: list[dict[str, Any]] = sort_by_date(filtered_by_state, False)
-                                user_list = sorted_by_date
-                                break
+                            if (user_choice_sort_up_or_down == 'по возрастанию'
+                                or user_choice_sort_up_or_down == 'по возрастанию'):
+                                try:
+                                    if user_choice_sort_up_or_down == 'по возрастанию':
+                                        sorted_by_date: list[dict[str, Any]] = (
+                                            sort_by_date(filtered_by_state, False))
+                                        user_list = sorted_by_date
+                                        break
+                                    else:
+                                        sorted_by_date: list[dict[str, Any]] = sort_by_date(filtered_by_state)
+                                        user_list = sorted_by_date
+                                        break
+                                except Exception as ex:
+                                    print(f'Возникла ошибка: {ex}')
+                                    break
                             else:
-                                sorted_by_date: list[dict[str, Any]] = sort_by_date(filtered_by_state)
-                                user_list = sorted_by_date
-                                break
-                        except Exception as ex:
-                            print(f'Возникла ошибка: {ex}')
-                            break
+                                print('Можно выбрать только: по возрастанию / по убыванию')
+                        break
                     break
-                break
-            else:
-                print('Можно выбрать только: Да/Нет')
+                else:
+                    print('Можно выбрать только: Да/Нет')
+            except UnicodeDecodeError:
+                print('Переключите раскладку и попробуйте снова')
+
 
         while True:
             # Выбираем в какой валюте выводить транзакции.
@@ -127,8 +136,9 @@ def main():
 
             if user_choice_filter_by_descriptions == 'да' or user_choice_filter_by_descriptions == 'нет':
                 if user_choice_filter_by_descriptions == 'да':
-                    sorted_by_descriptions = transaction_descriptions(user_list)
-                    user_list = sorted_by_descriptions
+                    user_word = input('Введите слово для поиска транзакций: ').lower()
+                    filtered_by_description = filter_by_description(user_list, search_word=user_word)
+                    user_list = filtered_by_description
                     break
                 break
             else:
