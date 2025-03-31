@@ -3,11 +3,11 @@ import csv
 import json
 import os
 import re
+from collections import Counter
 from typing import Any
 
 import pandas as pd
 
-from collections import Counter
 from src.logging_utils import logger
 
 
@@ -173,17 +173,17 @@ def count_operations_by_category(operations_list_for_count: list, categories_lis
     if not operations_list_for_count:
         return {}
 
-    logger.info('Инициализируем счетчик для категорий')
+    logger.info("Инициализируем счетчик для категорий")
     category_counter = Counter()
 
     try:
-        logger.info('Проходим по каждому описанию операции и ищем соответствие с категориями')
+        logger.info("Проходим по каждому описанию операции и ищем соответствие с категориями")
         for operation in operations_list_for_count:
             description = operation.get("description", "").lower()
 
             matched_categories = [category for category in categories_list if category.lower() in description]
 
-            logger.info('Увеличиваем счетчики для найденных категорий')
+            logger.info("Увеличиваем счетчики для найденных категорий")
             for category in matched_categories:
                 category_counter.update({category: 1})
 
