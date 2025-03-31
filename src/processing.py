@@ -1,4 +1,5 @@
 ############################################################################
+import re
 from typing import Any, Iterable, Optional
 
 
@@ -28,6 +29,25 @@ def sort_by_date(list_of_actions: Iterable[dict[str, Any]], descending: Optional
         descending = True
     sorted_list = sorted(list_of_actions, key=lambda x: x["date"], reverse=descending)
     return sorted_list
+
+
+def filter_by_description(list_of_actions: Iterable[dict[str, Any]], search_word: str) -> list[dict[str, Any]] | None:
+    """
+    Функция принимает список словарей и слово для фильтрации списка транзакций,
+    Функция возвращает новый список, отсортированный по предложенному слову.
+    """
+    if search_word:
+        # Регулярное выражение для поиска слова в любом месте строки
+        pattern = f".*{search_word}.*"
+
+        filtered_list = []
+        for action_dict in list_of_actions:
+            if re.search(pattern, action_dict['description'], re.IGNORECASE):
+                filtered_list.append(action_dict)
+
+        return filtered_list
+    else:
+        return []
 
 
 ############################################################################
