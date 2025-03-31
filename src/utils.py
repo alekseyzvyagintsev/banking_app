@@ -140,9 +140,7 @@ def search_operations(operations_list: list, search_string: str) -> list:
 
             logger.info("Фильтруем операции, где описание соответствует строке поиска")
             filtered_list = [
-                operation
-                for operation in operations_list
-                if pattern.search(operation.get("description", ""))
+                operation for operation in operations_list if pattern.search(operation.get("description", ""))
             ]
 
             return filtered_list
