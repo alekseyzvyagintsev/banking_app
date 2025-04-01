@@ -8,25 +8,12 @@ def filter_by_currency(
     """
     Фильтр списка транзакций по типу валюты.
     На вход принимает список транзакций.
-    На возвращает отфильтрованный список транзакций.
+    На выходе возвращает отфильтрованный список транзакций.
     """
 
     def find_currency_in_transaction(transaction):
         """Рекурсивная функция для поиска валюты в словаре транзакции."""
-        stack = [transaction]
-
-        while stack:
-            item = stack.pop()
-            if isinstance(item, dict):  # Проверяем, является ли элемент словарем
-                if "currency" in item and "code" in item["currency"]:
-                    if item["currency"]["code"] == currency_code:
-                        return True
-                else:
-                    stack.extend(item.values())  # Добавляем значения словаря в стек
-            elif isinstance(item, list):  # Проверяем, является ли элемент списком
-                stack.extend(item)  # Добавляем элементы списка в стек
-
-        return False
+        return transaction.get("operationAmount", {}).get("currency", {}).get("code") == currency_code
 
     filtered_list = [transaction for transaction in list_of_actions if find_currency_in_transaction(transaction)]
     return list(filtered_list)

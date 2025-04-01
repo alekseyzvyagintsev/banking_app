@@ -37,10 +37,9 @@ from src.generators import filter_by_currency
 def test_filter_by_usd(transactions_data: list[dict[str, Any]], code: str, expected: list[dict[str, Any]]) -> None:
     """Тест фильтра списка транзакций по типу валюты USD"""
     usd_out = []
-    usd_transactions = filter_by_currency(transactions_data, code)
+    usd_transactions = iter(filter_by_currency(transactions_data, code))
     for _ in range(2):
         usd_out.append(next(iter(usd_transactions)))
-    print(usd_out)
     assert usd_out == expected
 
 
@@ -75,10 +74,9 @@ def test_filter_by_usd(transactions_data: list[dict[str, Any]], code: str, expec
 def test_filter_by_rub(transactions_data: list[dict[str, Any]], code: str, expected: list[dict[str, Any]]) -> None:
     """Тест фильтра списка транзакций по типу валюты RUB"""
     rub_out = []
-    rub_transactions = filter_by_currency(transactions_data, code)
+    rub_transactions = iter(filter_by_currency(transactions_data, code))
     for _ in range(2):
         rub_out.append(next(iter(rub_transactions)))
-    print(rub_out)
     assert rub_out == expected
 
 

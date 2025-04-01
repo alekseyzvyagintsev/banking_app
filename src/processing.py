@@ -12,7 +12,7 @@ def filter_by_state(list_of_actions: list[dict[str, Any]], state: Optional[str] 
     if not state:
         state = "EXECUTED"
     if any(state in dict_from_list.values() for dict_from_list in list_of_actions):
-        result = [d for d in list_of_actions if d.get("state") == state]
+        result = [d for d in list_of_actions if d.get("state", "") == state]
         return result
     else:
         return []

@@ -5,6 +5,7 @@ from typing import Any
 import requests
 from dotenv import load_dotenv
 
+from src.logging_external_api import logger
 from src.utils import get_json_transactions
 
 load_dotenv()
@@ -22,10 +23,12 @@ def returns_the_transaction_amount(transaction: Any) -> Any:
     currency = operation_amount.get("currency")
     currency_code = currency.get("code")
     if transaction:
+        logger.info("Проверяем если транзакция рублевая, возвращаем как есть")
         if operation_amount:
             if currency_code == "RUB":
                 return amount
             else:
+                logger.info("Транзакция не в рублях, поэтому обращаемся к внешнему API за обменным курсом")
                 url = "https://api.apilayer.com/exchangerates_data/convert"
                 token = {"apikey": os.getenv("APILAYER_KEY")}
                 # token = {"apikey": "2JDgBB9f8ff2txYJySaFPr8dFNMHvfgE"}
@@ -34,18 +37,23 @@ def returns_the_transaction_amount(transaction: Any) -> Any:
                     "from": currency.get("code"),
                     "to": "RUB",
                 }
+                logger.info("Получаем ответ от сервера")
                 response = requests.get(url, headers=token, params=params)
                 status_code = response.status_code
                 if status_code == 200:
                     result = response.json()
+                    logger.info(f"Положительный ответ получен: {result}")
                     return result.get("result")
+                elif status_code == 500:
+                    logger.error(Exception("Server Error"))
+                    raise Exception("Server Error")
                 else:
-                    print(f"Site error: {response.reason}")
+                    logger.error(f"Site error: {response.reason}")
         else:
-            print("Ключ 'operationAmount' отсутствует")
+            logger.error("Ключ 'operationAmount' отсутствует")
             return ""
     else:
-        print("На обработку поступил пустой обьект")
+        print("На обработку поступил пустой объект")
         return ""
 
 
@@ -53,6 +61,7 @@ if __name__ == "__main__":
     file_with_operations = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "operations.json")
     operations_list = get_json_transactions(file_with_operations)
     get_amount: Any = returns_the_transaction_amount(operations_list[1])
+    print(operations_list[1])
     print(get_amount)
 
 ############################################################################################
