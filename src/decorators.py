@@ -21,7 +21,7 @@ def log(filename: Any) -> Any:
                     f"{time.asctime()} {function.__name__} error: {type(e).__name__}. Explanation {e}"
                 )
             if filename:
-                path_to_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), "tests", filename)
+                path_to_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), "logs", filename)
                 with open(path_to_file, "a", encoding="utf-8") as file:
                     file.write(f"{logging_string}\n")
             else:

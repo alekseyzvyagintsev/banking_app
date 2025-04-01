@@ -2,13 +2,16 @@
 import csv
 import json
 import os
+import re
+from collections import Counter
+from typing import Any
 
 import pandas as pd
 
 from src.logging_utils import logger
 
 
-def converting_data_from_json_to_dict_list(data_file: int | str | bytes) -> list | None:
+def get_json_transactions(data_file: int | str | bytes) -> list | None:
     """
     Функцию принимает на вход путь до JSON-файла
     и возвращает список словарей с данными о финансовых транзакциях.
@@ -43,11 +46,12 @@ def converting_data_from_json_to_dict_list(data_file: int | str | bytes) -> list
 
 # if __name__ == "__main__":
 #     file_with_operations = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "operations.json")
-#     operations_list = converting_data_from_json_to_a_dict_list(file_with_operations)
+#     operations_list = get_json_transactions(file_with_operations)
 #     print(operations_list[0])
 
 
-def converting_data_from_csv_to_dict_list(data_file: int | str | bytes) -> list | None:
+############################################################################################
+def get_csv_transactions(data_file: int | str | bytes) -> list | None:
     """
     Функцию принимает на вход путь до csv-файла
     и возвращает список словарей с данными о финансовых транзакциях.
@@ -81,11 +85,12 @@ def converting_data_from_csv_to_dict_list(data_file: int | str | bytes) -> list 
 
 # if __name__ == "__main__":
 #     file_with_operations = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data/transactions.csv")
-#     operations_list = converting_data_from_csv_to_dict_list(file_with_operations)
+#     operations_list = get_csv_transactions(file_with_operations)
 #     print(operations_list[0])
 
 
-def converting_data_from_xlsx_to_dataframe(data_file: int | str | bytes) -> list | None:
+############################################################################################
+def get_xlsx_transactions(data_file: int | str | bytes) -> list | None:
     """
     Функцию принимает на вход путь до excel-файла
     и возвращает DataFrame с финансовыми транзакциями.
@@ -116,12 +121,89 @@ def converting_data_from_xlsx_to_dataframe(data_file: int | str | bytes) -> list
     return []
 
 
-if __name__ == "__main__":
-    file_with_operations = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data/transactions_excel.xlsx")
-    operations_list = converting_data_from_xlsx_to_dataframe(file_with_operations)
-    print(operations_list[0])
+# if __name__ == "__main__":
+#     file_with_operations = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data/transactions_excel.xlsx")
+#     operations_list = get_xlsx_transactions(file_with_operations)
+#     print(operations_list[0])
 
-    # print(operations_list.shape)
-    # print(operations_list.head())
+
+############################################################################################
+def search_operations(operations_list: list, search_string: str) -> list:
+    """
+    Функция принимает на вход список словарей с данными о банковских операциях
+    и строку поиска, а возвращать список словарей, у которых в описании есть данная строка.
+    """
+    logger.info("Проверяем, является ли список пустым")
+    if operations_list:
+        try:
+            logger.info("Преобразуем строку поиска в регулярное выражение (можно добавить флаг re.IGNORECASE)")
+            pattern = re.compile(search_string, flags=re.IGNORECASE)
+
+            logger.info("Фильтруем операции, где описание соответствует строке поиска")
+            filtered_list = [
+                operation for operation in operations_list if pattern.search(operation.get("description", ""))
+            ]
+
+            return filtered_list
+        except Exception as ex:
+            logger.error(f"Произошла ошибка: {ex}")
+
+    return []
+
+
+# if __name__ == "__main__":
+#     data = [
+#         {"id": 1, "amount": 1000, "description": "Оплата услуг связи"},
+#         {"id": 2, "amount": 500, "description": "Покупка продуктов"},
+#         {"id": 3, "amount": 2000, "description": "Оплата коммунальных услуг"},
+#     ]
+#
+#     search_result = search_operations(data, "услуг")
+#     print(search_result)
+
+
+############################################################################################
+def count_operations_by_category(operations_list_for_count: list, categories_list: list) -> dict[Any] | dict[Any, int]:
+    """
+    Функция принимает список словарей с данными о банковских операциях и список категорий операций,
+    а возвращать словарь, в котором ключи — это названия категорий, а значения — это количество операций
+    в каждой категории. Категории операций хранятся в поле description.
+    """
+    logger.info("Проверяем, является ли список пустым")
+    if not operations_list_for_count:
+        return {}
+
+    logger.info("Инициализируем счетчик для категорий")
+    category_counter = Counter()
+
+    try:
+        logger.info("Проходим по каждому описанию операции и ищем соответствие с категориями")
+        for operation in operations_list_for_count:
+            description = operation.get("description", "").lower()
+
+            matched_categories = [category for category in categories_list if category.lower() in description]
+
+            logger.info("Увеличиваем счетчики для найденных категорий")
+            for category in matched_categories:
+                category_counter.update({category: 1})
+
+        return dict(category_counter)
+    except Exception as ex:
+        logger.error(f"Произошла ошибка: {ex}")
+
+
+# # Пример использования функции
+# if __name__ == "__main__":
+#     operations_list = [
+#         {"description": "Оплата коммунальных услуг"},
+#         {"description": "Пополнение счета"},
+#         {"description": "Перевод средств на карту"},
+#         {"description": "Оплата услуг связи"}
+#     ]
+#
+#     categories = ["оплата", "перевод", "пополнение"]
+#
+#     result = count_operations_by_category(operations_list, categories)
+#     print(result)
 
 ############################################################################################
