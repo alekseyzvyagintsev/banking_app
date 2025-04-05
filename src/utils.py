@@ -207,7 +207,6 @@ def count_operations_by_category(operations_list_for_count: list, categories_lis
 #     print(result)
 
 ############################################################################################
-
 def read_user_settings(file_path: str) -> dict:
     with open(file_path, "r") as f:
         settings = json.load(f)

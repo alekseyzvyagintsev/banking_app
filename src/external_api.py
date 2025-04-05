@@ -72,26 +72,36 @@ class CurrencyRate:
 
 
 def fetch_exchange_rates(currencies: list[str]) -> list: #[CurrencyRate]:
-    # rates = []
-    url = 'https://v1.apiplugin.io/v1/currency/BJtHXRpB/rates?'
-    headers = {'Content-Type': 'application/json'}
-    params = {
-        'source': 'RUB',
-        'target': currencies
-    }
-    # for currency in currencies:
-    logger.info("Получаем ответ от сервера")
-    response = requests.get(url, headers=headers, params=params)
-    if response.status_code == 200:
-        rates = response.json()["rates"]
-        # rates.append(CurrencyRate(currency, rate))
-        print(rates)
-        return rates
-    elif response.status_code == 500:
-        logger.error(Exception("Server Error"))
-        raise Exception("Server Error")
-    else:
-        logger.error(f"Site error: {response.reason}")
+    rates = []
+    for currency in currencies:
+        logger.info("Получаем ответ от сервера")
+        url = 'https://api.apilayer.com/exchangerates_data/latest'
+        token = {"apikey": os.getenv("APILAYER_KEY")}
+        payload = {}
+        params = {
+            'base': 'RUB',
+            'symbols': currency
+        }
+        response = requests.get(url, headers=token, params=params, data=payload)
+        if response.status_code == 200:
+            rate = response.json()["rates"]
+            rates.append(CurrencyRate(currency, rate))
+            print(params['symbols'])
+            print(rates)
+        elif response.status_code == 500:
+            logger.error(Exception("Server Error"))
+            raise Exception("Server Error")
+        else:
+            logger.error(f"Site error: {response.reason}")
+    return rates
+
+if __name__ == '__main__':
+    user_settings = read_user_settings(
+        os.path.join(os.path.dirname(os.path.dirname(__file__)),
+                     "data/user_settings.json")
+    )
+    currencies = user_settings.get("user_currencies")
+    exchange_rates = fetch_exchange_rates(currencies)
 
 
 ############################################################################################
@@ -114,11 +124,3 @@ def fetch_stock_prices(stocks: List[str]) -> List[StockPrice]:
 
 
 ############################################################################################
-
-if __name__ == '__main__':
-    user_settings = read_user_settings(
-        os.path.join(os.path.dirname(os.path.dirname(__file__)),
-                     "data/user_settings.json")
-    )
-    currencies = user_settings.get("user_currencies")
-    exchange_rates = fetch_exchange_rates(currencies)
