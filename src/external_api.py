@@ -1,12 +1,13 @@
 #############################################################################################
 import os
-from typing import Any
+from dataclasses import dataclass
+from typing import Any, List
 
 import requests
 from dotenv import load_dotenv
 
 from src.logging_external_api import logger
-from src.utils import get_json_transactions
+from src.utils import get_json_data, read_user_settings
 
 load_dotenv()
 
@@ -39,12 +40,11 @@ def returns_the_transaction_amount(transaction: Any) -> Any:
                 }
                 logger.info("Получаем ответ от сервера")
                 response = requests.get(url, headers=token, params=params)
-                status_code = response.status_code
-                if status_code == 200:
+                if response.status_code == 200:
                     result = response.json()
                     logger.info(f"Положительный ответ получен: {result}")
                     return result.get("result")
-                elif status_code == 500:
+                elif response.status_code == 500:
                     logger.error(Exception("Server Error"))
                     raise Exception("Server Error")
                 else:
@@ -57,11 +57,68 @@ def returns_the_transaction_amount(transaction: Any) -> Any:
         return ""
 
 
-if __name__ == "__main__":
-    file_with_operations = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "operations.json")
-    operations_list = get_json_transactions(file_with_operations)
-    get_amount: Any = returns_the_transaction_amount(operations_list[1])
-    print(operations_list[1])
-    print(get_amount)
+# if __name__ == "__main__":
+#     file_with_operations = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "operations.json")
+#     operations_list = get_json_data(file_with_operations)
+#     get_amount: Any = returns_the_transaction_amount(operations_list[1])
+#     print(operations_list[1])
+#     print(get_amount)
 
 ############################################################################################
+@dataclass
+class CurrencyRate:
+    currency: str
+    rate: float
+
+
+def fetch_exchange_rates(currencies: list[str]) -> list: #[CurrencyRate]:
+    # rates = []
+    url = 'https://v1.apiplugin.io/v1/currency/BJtHXRpB/rates?'
+    headers = {'Content-Type': 'application/json'}
+    params = {
+        'source': 'RUB',
+        'target': currencies
+    }
+    # for currency in currencies:
+    logger.info("Получаем ответ от сервера")
+    response = requests.get(url, headers=headers, params=params)
+    if response.status_code == 200:
+        rates = response.json()["rates"]
+        # rates.append(CurrencyRate(currency, rate))
+        print(rates)
+        return rates
+    elif response.status_code == 500:
+        logger.error(Exception("Server Error"))
+        raise Exception("Server Error")
+    else:
+        logger.error(f"Site error: {response.reason}")
+
+
+############################################################################################
+@dataclass
+class StockPrice:
+    stock: str
+    price: float
+
+
+STOCK_PRICES_API_URL = "your_stock_price_api_url"
+
+def fetch_stock_prices(stocks: List[str]) -> List[StockPrice]:
+    prices = []
+    for stock in stocks:
+        response = requests.get(STOCK_PRICES_API_URL, params={"symbol": stock})
+        if response.status_code == 200:
+            price = response.json()["price"]
+            prices.append(StockPrice(stock, price))
+    return prices
+
+
+############################################################################################
+
+if __name__ == '__main__':
+    user_settings = read_user_settings(
+        os.path.join(os.path.dirname(os.path.dirname(__file__)),
+                     "data/user_settings.json")
+    )
+    currencies = user_settings.get("user_currencies")
+    exchange_rates = fetch_exchange_rates(currencies)
