@@ -1,13 +1,12 @@
 #############################################################################################
 import os
-from dataclasses import dataclass
-from typing import Any, List
+from typing import Any
 
 import requests
 from dotenv import load_dotenv
 
 from src.logging_external_api import logger
-from src.utils import get_json_data
+from src.utils import get_json_transactions
 
 load_dotenv()
 
@@ -60,48 +59,9 @@ def returns_the_transaction_amount(transaction: Any) -> Any:
 
 if __name__ == "__main__":
     file_with_operations = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "operations.json")
-    operations_list = get_json_data(file_with_operations)
+    operations_list = get_json_transactions(file_with_operations)
     get_amount: Any = returns_the_transaction_amount(operations_list[1])
     print(operations_list[1])
     print(get_amount)
-
-############################################################################################
-@dataclass
-class CurrencyRate:
-    currency: str
-    rate: float
-
-
-EXCHANGE_RATES_API_URL = 'https://v1.apiplugin.io/v1/currency/BJtHXRpB/rates'
-
-def fetch_exchange_rates(currencies: list[str]) -> list[CurrencyRate]:
-    rates = []
-    headers = {'Content-Type': 'application/json'}
-    for currency in currencies:
-        response = requests.get(EXCHANGE_RATES_API_URL, headers, params={"currency": currency})
-        if response.status_code == 200:
-                rate = response.json()["rate"]
-            rates.append(CurrencyRate(currency, rate))
-    return rates
-
-
-############################################################################################
-@dataclass
-class StockPrice:
-    stock: str
-    price: float
-
-
-STOCK_PRICES_API_URL = "your_stock_price_api_url"
-
-def fetch_stock_prices(stocks: List[str]) -> List[StockPrice]:
-    prices = []
-    for stock in stocks:
-        response = requests.get(STOCK_PRICES_API_URL, params={"symbol": stock})
-        if response.status_code == 200:
-            price = response.json()["price"]
-            prices.append(StockPrice(stock, price))
-    return prices
-
 
 ############################################################################################
