@@ -1,5 +1,7 @@
 #############################################################################################
 import os
+import yfinance as yf
+
 from dataclasses import dataclass
 from typing import Any, List
 
@@ -7,7 +9,7 @@ import requests
 from dotenv import load_dotenv
 
 from src.logging_external_api import logger
-from src.utils import get_json_data, read_user_settings
+from src.utils import read_user_settings
 
 load_dotenv()
 
@@ -65,13 +67,13 @@ def returns_the_transaction_amount(transaction: Any) -> Any:
 #     print(get_amount)
 
 ############################################################################################
-@dataclass
 class CurrencyRate:
-    currency: str
-    rate: float
+    def __init__(self, currency: str, rate: float):
+        self.currency = currency
+        self.rate = rate
 
 
-def fetch_exchange_rates(currencies: list[str]) -> list: #[CurrencyRate]:
+def fetch_exchange_rates(currencies: list[str]) -> list[CurrencyRate]: #[CurrencyRate]:
     rates = []
     for currency in currencies:
         logger.info("Получаем ответ от сервера")
@@ -86,8 +88,6 @@ def fetch_exchange_rates(currencies: list[str]) -> list: #[CurrencyRate]:
         if response.status_code == 200:
             rate = response.json()["rates"]
             rates.append(CurrencyRate(currency, rate))
-            print(params['symbols'])
-            print(rates)
         elif response.status_code == 500:
             logger.error(Exception("Server Error"))
             raise Exception("Server Error")
@@ -95,32 +95,46 @@ def fetch_exchange_rates(currencies: list[str]) -> list: #[CurrencyRate]:
             logger.error(f"Site error: {response.reason}")
     return rates
 
-if __name__ == '__main__':
-    user_settings = read_user_settings(
-        os.path.join(os.path.dirname(os.path.dirname(__file__)),
-                     "data/user_settings.json")
-    )
-    currencies = user_settings.get("user_currencies")
-    exchange_rates = fetch_exchange_rates(currencies)
+# if __name__ == '__main__':
+#     user_settings = read_user_settings(
+#         os.path.join(os.path.dirname(os.path.dirname(__file__)),
+#                      "data/user_settings.json")
+#     )
+#     currencies = user_settings.get("user_currencies")
+#     exchange_rates = fetch_exchange_rates(currencies)
 
 
 ############################################################################################
-@dataclass
 class StockPrice:
-    stock: str
-    price: float
+    def __init__(self, stock: str, price: float):
+        self.stock = stock
+        self.price = price
 
 
-STOCK_PRICES_API_URL = "your_stock_price_api_url"
+def fetch_stock_prices(stocks: list) -> list[StockPrice]:
 
-def fetch_stock_prices(stocks: List[str]) -> List[StockPrice]:
     prices = []
-    for stock in stocks:
-        response = requests.get(STOCK_PRICES_API_URL, params={"symbol": stock})
-        if response.status_code == 200:
-            price = response.json()["price"]
-            prices.append(StockPrice(stock, price))
+
+    # Получение цен всех акций
+    tickers_data = yf.Tickers(' '.join(stocks)).tickers
+
+    for ticker in stocks:
+        try:
+            # Получение текущей цены акции
+            price = tickers_data[ticker].info['regularMarketPrice']
+            prices.append(StockPrice(ticker, price))
+        except KeyError:
+            print(f"Не удалось получить цену для {ticker}.")
+
     return prices
 
 
+# if __name__ == '__main__':
+#     user_settings = read_user_settings(
+#         os.path.join(os.path.dirname(os.path.dirname(__file__)),
+#                      "data/user_settings.json")
+#     )
+#     stocks = user_settings.get("user_stocks")
+#     exchange_rates = fetch_stock_prices(stocks)
+#     print(exchange_rates)
 ############################################################################################
