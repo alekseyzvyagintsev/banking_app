@@ -6,13 +6,12 @@ from typing import Tuple
 import pandas as pd
 
 from src.external_api import fetch_exchange_rates, fetch_stock_prices
-from src.processing import (
-    group_expenses_by_category,
-    calculate_total_expense,
-    get_transfers_and_cash,
-    group_income_by_category,
-    calculate_total_income, sort_by_descending,
-)
+from src.processing import (calculate_total_expense,
+                            calculate_total_income,
+                            get_transfers_and_cash,
+                            group_expenses_by_category,
+                            group_income_by_category,
+                            sort_by_descending)
 from src.utils import get_xlsx_data, read_user_settings
 
 
@@ -34,19 +33,15 @@ def generate_report(date_str: str, period: str = "M") -> str:
     # вычисляем начальную и конечную даты периода
     start_date, end_date = determine_period(date_obj, period)
     # Получаем полный список банковских операций
-    transactions_list = get_xlsx_data(
-        os.path.join(os.path.dirname(os.path.dirname(__file__)),
-        "data/operations.xlsx")
-    )
+    transactions_list = get_xlsx_data(os.path.join(os.path.dirname(os.path.dirname(__file__)), "data/operations.xlsx"))
     # Преобразуем для удобства список в DataFrame
     df = pd.DataFrame(transactions_list)
-    # Получаем данные только те которые входят в выбрвнный период
+    # Получаем данные только те которые входят в выбранный период
     df_filtered = filter_data(df, start_date, end_date)
     # Читаем из файла данные о валютах и ценных бумагах которые клиент отслеживает
     user_settings = read_user_settings(
-        os.path.join(os.path.dirname(os.path.dirname(__file__)),
-        "data/user_settings.json")
-        )
+        os.path.join(os.path.dirname(os.path.dirname(__file__)), "data/user_settings.json")
+    )
     # Список валют
     currencies = user_settings.get("user_currencies")
     # Список ценных бумаг
@@ -72,15 +67,12 @@ def generate_report(date_str: str, period: str = "M") -> str:
     report = {
         "expenses": {
             "total_amount": round(total_expense),
-            "main": [cat.__dict__ for cat in main_section],
-            "others": [cat.__dict__ for cat in transfers_and_cash_section]
+            "main": main_section,
+            "others": transfers_and_cash_section,
         },
-        "income": {
-            "total_amount": round(total_income),
-            "main": [cat.__dict__ for cat in sorted_income_categories]
-        },
-        "currency_rates": [cat.__dict__ for cat in exchange_rates],
-        "stock_prices": [cat.__dict__ for cat in stock_prices]
+        "income": {"total_amount": round(total_income), "main": sorted_income_categories},
+        "currency_rates": exchange_rates,
+        "stock_prices": stock_prices,
     }
 
     return json.dumps(report, indent=4, ensure_ascii=False)
@@ -117,13 +109,14 @@ def filter_data(df: pd.DataFrame, start_date: datetime.date, end_date: datetime.
     """
     Фильтрация данных по выбранному периоду W, M, Y или ALL
     """
-    df["Дата операции"] = pd.to_datetime(df["Дата операции"], format='%d.%m.%Y %H:%M:%S')
+    df["Дата операции"] = pd.to_datetime(df["Дата операции"], format="%d.%m.%Y %H:%M:%S")
     start_datetime = datetime.datetime.combine(start_date, datetime.datetime.min.time())
     end_datetime = datetime.datetime.combine(end_date, datetime.datetime.max.time())
     mask = (df["Дата операции"] >= start_datetime) & (df["Дата операции"] <= end_datetime)
     return df.loc[mask]
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
 
     report = generate_report("04.04.2021", "M")
     print(report)

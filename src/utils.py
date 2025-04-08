@@ -192,7 +192,6 @@ def count_operations_by_category(operations_list_for_count: list, categories_lis
         logger.error(f"Произошла ошибка: {ex}")
 
 
-# # Пример использования функции
 # if __name__ == "__main__":
 #     operations_list = [
 #         {"description": "Оплата коммунальных услуг"},
@@ -206,18 +205,21 @@ def count_operations_by_category(operations_list_for_count: list, categories_lis
 #     result = count_operations_by_category(operations_list, categories)
 #     print(result)
 
+
 ############################################################################################
 def read_user_settings(file_path: str) -> dict:
+    """Функция для получения курса акций из входящего списка акций."""
     with open(file_path, "r") as f:
         settings = json.load(f)
     return settings
 
 
-if __name__ == '__main__':
-    user_settings = read_user_settings(
-        os.path.join(os.path.dirname(os.path.dirname(__file__)),
-                     "data/user_settings.json")
-    )
-    currencies = user_settings.get("user_currencies")
-    stocks = user_settings.get("user_stocks")
-    print(currencies, stocks)
+# if __name__ == "__main__":
+#     user_settings = read_user_settings(
+#         os.path.join(os.path.dirname(os.path.dirname(__file__)), "data/user_settings.json")
+#     )
+#     currencies = user_settings.get("user_currencies")
+#     stocks = user_settings.get("user_stocks")
+#     print(currencies, stocks)
+
+############################################################################################
