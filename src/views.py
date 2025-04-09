@@ -12,6 +12,7 @@ from src.processing import (calculate_total_expense,
                             group_expenses_by_category,
                             group_income_by_category,
                             sort_by_descending)
+from src.logging_views import logger
 from src.utils import get_xlsx_data, read_user_settings
 
 
@@ -28,42 +29,42 @@ def generate_report(date_str: str, period: str = "M") -> str:
     2. В категории Основные - Топ-7 поступлений отсортированные по убыванию
     """
 
-    # преобразует строку даты date_str в объект типа datetime
+    logger.info('преобразует строку даты date_str в объект типа datetime')
     date_obj = datetime.datetime.strptime(date_str, "%d.%m.%Y")
-    # вычисляем начальную и конечную даты периода
+    logger.info('вычисляем начальную и конечную даты периода')
     start_date, end_date = determine_period(date_obj, period)
-    # Получаем полный список банковских операций
+    logger.info('Получаем полный список банковских операций')
     transactions_list = get_xlsx_data(os.path.join(os.path.dirname(os.path.dirname(__file__)), "data/operations.xlsx"))
-    # Преобразуем для удобства список в DataFrame
+    logger.info('Преобразуем для удобства список в DataFrame')
     df = pd.DataFrame(transactions_list)
-    # Получаем данные только те которые входят в выбранный период
+    logger.info('Получаем данные только те которые входят в выбранный период')
     df_filtered = filter_data(df, start_date, end_date)
-    # Читаем из файла данные о валютах и ценных бумагах которые клиент отслеживает
+    logger.info('Читаем из файла данные о валютах и ценных бумагах которые клиент отслеживает')
     user_settings = read_user_settings(
         os.path.join(os.path.dirname(os.path.dirname(__file__)), "data/user_settings.json")
     )
-    # Список валют
+    logger.info('Получаем список валют')
     currencies = user_settings.get("user_currencies")
-    # Список ценных бумаг
+    logger.info('Получаем список ценных бумаг')
     stocks = user_settings.get("user_stocks")
-    # Получение курсов валют
+    logger.info('Получаем курсы валют')
     exchange_rates = fetch_exchange_rates(currencies)
-    # Получение курса ценных бумаг
+    logger.info('Получаем курсы ценных бумаг')
     stock_prices = fetch_stock_prices(stocks)
-    # Все расходы
+    logger.info('Подсчитываем все расходы')
     total_expense = calculate_total_expense(df_filtered)
-    # Основные категории расходов
+    logger.info('Выбираем основные категории расходов')
     main_section = group_expenses_by_category(df_filtered)
-    # Переводы и наличные
+    logger.info('Выбираем переводы и наличные')
     transfers_and_cash_section = get_transfers_and_cash(df_filtered)
-    # Все поступления
+    logger.info('Подсчитываем все поступления')
     total_income = calculate_total_income(df_filtered)
-    # Основные категории поступлений
+    logger.info('Выбираем основные категории поступлений')
     main_income = group_income_by_category(df_filtered)
-    # Основные категории поступлений отсортированные по убыванию
+    logger.info('Получаем основные категории поступлений отсортированные по убыванию')
     sorted_income_categories = sort_by_descending(main_income)
 
-    # Формирование json ответа
+    logger.info('Формируем json ответ')
     report = {
         "expenses": {
             "total_amount": round(total_expense),
@@ -109,6 +110,7 @@ def filter_data(df: pd.DataFrame, start_date: datetime.date, end_date: datetime.
     """
     Фильтрация данных по выбранному периоду W, M, Y или ALL
     """
+    logger.info('Фильтрация данных по выбранному периоду W, M, Y или ALL')
     df["Дата операции"] = pd.to_datetime(df["Дата операции"], format="%d.%m.%Y %H:%M:%S")
     start_datetime = datetime.datetime.combine(start_date, datetime.datetime.min.time())
     end_datetime = datetime.datetime.combine(end_date, datetime.datetime.max.time())
@@ -117,6 +119,6 @@ def filter_data(df: pd.DataFrame, start_date: datetime.date, end_date: datetime.
 
 
 if __name__ == "__main__":
-
+    logger.info('Запускаем основную логику страницы событий')
     report = generate_report("04.04.2021", "M")
     print(report)
