@@ -8,14 +8,12 @@ import pandas as pd
 
 from src.external_api import fetch_exchange_rates, fetch_stock_prices
 from src.logging_views import logger
-from src.processing import (
-    calculate_total_expense,
-    calculate_total_income,
-    get_transfers_and_cash,
-    group_expenses_by_category,
-    group_income_by_category,
-    sort_by_descending,
-)
+from src.processing import (calculate_total_expense,
+                            calculate_total_income,
+                            get_transfers_and_cash,
+                            group_expenses_by_category,
+                            group_income_by_category,
+                            sort_by_descending)
 from src.utils import get_xlsx_data, read_user_settings
 
 

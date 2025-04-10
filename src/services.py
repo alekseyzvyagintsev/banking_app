@@ -30,10 +30,9 @@ def investment_bank(month: str, transactions: list, limit: int) -> float:
         if not operation_date_str:
             continue  # Пропускаем операции без даты
 
-        # operation_date = datetime.date()
         split_operation_date_str = re.findall(r"\d+", operation_date_str)
         joined_operation_date_str = ""
-        if len(split_date) >= 2:
+        if len(split_operation_date_str) >= 3:
             joined_operation_date_str = (
                 f"{split_operation_date_str[0]}.{split_operation_date_str[1]}.{split_operation_date_str[2]}"
             )
