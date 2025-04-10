@@ -2,13 +2,14 @@
 import json
 import os
 import time
-# from datetime import datetime
 from functools import wraps
 from typing import Any, Optional
 
 import pandas as pd
 
 from src.logging_decorators import logger
+
+# from datetime import datetime
 
 
 def log(filename: Any) -> Any:
@@ -17,7 +18,6 @@ def log(filename: Any) -> Any:
     def decorator(function: Any) -> Any:
         @wraps(function)
         def wrapper(*args: Any, **kwargs: Any) -> Any:
-            logging_string = ""
             try:
                 result: Any = function(*args, **kwargs)
                 logging_string: str = f"{time.asctime()} {function.__name__} Ok"
@@ -72,7 +72,7 @@ def report_decorator(filename: Optional[str] = None):
             output_filename = default_filename or custom_filename
 
             logger.info("Записываем данные в файл")
-            with open(file_path, "a") as file:
+            with open(file_path, "a", encoding="utf-8") as file:
                 if isinstance(result, pd.DataFrame):
                     # Сохранение DataFrame в JSON
                     data = result.to_dict(orient="records")

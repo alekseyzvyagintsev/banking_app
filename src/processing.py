@@ -64,8 +64,8 @@ def filter_by_description(
                     filtered_list.append(transaction)
 
             return filtered_list
-        except Exception:
-            print(f"Не найдено ни одной транзакции со словом(ами) {search_string}")
+        except Exception as ex:
+            print(f"Не найдено ни одной транзакции со словом(ами) {search_string} {ex}")
             return filtered_list
     else:
         return []
@@ -81,19 +81,19 @@ def calculate_total_expense(df: pd.DataFrame) -> float:
 def group_expenses_by_category(df: pd.DataFrame, top_n=7) -> list:
     """группировка расходов по основным категориям"""
     global EXPENSES
-    logger.info('Отфильтровываем строки с расходами (суммы меньше нуля)')
+    logger.info("Отфильтровываем строки с расходами (суммы меньше нуля)")
     df_expenses = df[df["Сумма операции"] < 0]
 
-    logger.info('Группируем данные по категориям и считаем сумму операций')
+    logger.info("Группируем данные по категориям и считаем сумму операций")
     grouped = df_expenses.groupby("Категория")["Сумма операции"].sum().abs()  # берем модуль от суммы
 
-    logger.info('Сортируем категории по сумме операций в порядке убывания')
+    logger.info("Сортируем категории по сумме операций в порядке убывания")
     sorted_categories = grouped.sort_values(ascending=False)
 
-    logger.info('Берём первые N категорий с наибольшими расходами')
+    logger.info("Берём первые N категорий с наибольшими расходами")
     top_categories = sorted_categories.head(top_n)
 
-    logger.info('Формируем список категорий с суммами')
+    logger.info("Формируем список категорий с суммами")
     EXPENSES = [{"category": cat, "amount": round(sum_)} for cat, sum_ in top_categories.items()]
 
     logger.info('Суммируем остальные категории в "Остальное"')
@@ -109,10 +109,10 @@ def get_transfers_and_cash(df: pd.DataFrame) -> list:
     logger.info('Фильтруем строки по категориям "Наличные" и "Переводы"')
     filtered_df = df[(df["Категория"] == "Наличные") | (df["Категория"] == "Переводы")]
 
-    logger.info('Сортируем по сумме операций в порядке убывания')
+    logger.info("Сортируем по сумме операций в порядке убывания")
     sorted_df = filtered_df.sort_values(by="Сумма операции", ascending=True)
 
-    logger.info('Преобразуем результат в список объектов ExpenseCategory')
+    logger.info("Преобразуем результат в список объектов ExpenseCategory")
     transfers_and_cash = [
         {"category": row["Категория"], "amount": row["Сумма операции"]} for _, row in sorted_df.iterrows()
     ]
@@ -132,20 +132,20 @@ def calculate_total_income(df: pd.DataFrame) -> float:
 def group_income_by_category(df: pd.DataFrame, top_n=7) -> List[dict]:
     """группировка доходов по основным категориям"""
 
-    logger.info('Отфильтровываем строки с доходами (суммы больше нуля)')
+    logger.info("Отфильтровываем строки с доходами (суммы больше нуля)")
     global INCOME
     df_income = df[df["Сумма операции"] > 0]
 
-    logger.info('Группируем данные по категориям и считаем сумму операций')
+    logger.info("Группируем данные по категориям и считаем сумму операций")
     grouped = df_income.groupby("Категория")["Сумма операции"].sum().abs()  # берем модуль от суммы
 
-    logger.info('Сортируем категории по сумме операций в порядке убывания')
+    logger.info("Сортируем категории по сумме операций в порядке убывания")
     sorted_categories = grouped.sort_values(ascending=False)
 
-    logger.info('Берём первые N категорий с наибольшими поступлениями')
+    logger.info("Берём первые N категорий с наибольшими поступлениями")
     top_categories = sorted_categories.head(top_n)
 
-    logger.info('Формируем список категорий с суммами')
+    logger.info("Формируем список категорий с суммами")
     INCOME = [{"category": cat, "amount": round(sum_)} for cat, sum_ in top_categories.items()]
 
     logger.info('Суммируем остальные категории в "Остальное"')
@@ -163,7 +163,8 @@ def sort_by_descending(data: List[Dict]) -> List[Dict]:
 ############################################################################
 # if __name__ == "__main__":
 #
-#     transactions_list = get_xlsx_data(os.path.join(os.path.dirname(os.path.dirname(__file__)), "data/operations.xlsx"))
+#     transactions_list = get_xlsx_data(os.path.join(
+#                           os.path.dirname(os.path.dirname(__file__)), "data/operations.xlsx"))
 #     df = pd.DataFrame(transactions_list)
 #
 #     expenses_categories = group_expenses_by_category(df)
