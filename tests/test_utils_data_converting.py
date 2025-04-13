@@ -1,7 +1,7 @@
 ##################################################################################################
 import os
 
-from src.utils import get_json_transactions
+from src.utils import get_json_data
 
 expected = {
     "id": 41428829,
@@ -23,7 +23,7 @@ def test_data_converting() -> None:
 
     file_with_operations = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "operations.json")
 
-    operations_list = get_json_transactions(file_with_operations)
+    operations_list = get_json_data(file_with_operations)
     assert operations_list[1] == expected
 
 
@@ -35,7 +35,7 @@ def test_data_converting_without_file() -> None:
     file_with_operations = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data")
 
     try:
-        get_json_transactions(file_with_operations)
+        get_json_data(file_with_operations)
     except (IsADirectoryError, TypeError) as e:
         print(f"Произошла ошибка {e}")
 
@@ -50,5 +50,5 @@ def test_data_converting_not_list() -> None:
 
     file_with_operations = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "api_response.json")
 
-    operations_list = get_json_transactions(file_with_operations)
+    operations_list = get_json_data(file_with_operations)
     assert operations_list == []

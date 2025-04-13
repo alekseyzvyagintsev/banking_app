@@ -11,7 +11,7 @@ import pandas as pd
 from src.logging_utils import logger
 
 
-def get_json_transactions(data_file: int | str | bytes) -> list | None:
+def get_json_data(data_file: int | str | bytes) -> list | None:
     """
     Функцию принимает на вход путь до JSON-файла
     и возвращает список словарей с данными о финансовых транзакциях.
@@ -46,12 +46,12 @@ def get_json_transactions(data_file: int | str | bytes) -> list | None:
 
 # if __name__ == "__main__":
 #     file_with_operations = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "operations.json")
-#     operations_list = get_json_transactions(file_with_operations)
+#     operations_list = get_json_data(file_with_operations)
 #     print(operations_list[0])
 
 
 ############################################################################################
-def get_csv_transactions(data_file: int | str | bytes) -> list | None:
+def get_csv_data(data_file: int | str | bytes) -> list | None:
     """
     Функцию принимает на вход путь до csv-файла
     и возвращает список словарей с данными о финансовых транзакциях.
@@ -85,12 +85,12 @@ def get_csv_transactions(data_file: int | str | bytes) -> list | None:
 
 # if __name__ == "__main__":
 #     file_with_operations = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data/transactions.csv")
-#     operations_list = get_csv_transactions(file_with_operations)
+#     operations_list = get_csv_data(file_with_operations)
 #     print(operations_list[0])
 
 
 ############################################################################################
-def get_xlsx_transactions(data_file: int | str | bytes) -> list | None:
+def get_xlsx_data(data_file: int | str | bytes) -> list | None:
     """
     Функцию принимает на вход путь до excel-файла
     и возвращает DataFrame с финансовыми транзакциями.
@@ -123,7 +123,7 @@ def get_xlsx_transactions(data_file: int | str | bytes) -> list | None:
 
 # if __name__ == "__main__":
 #     file_with_operations = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data/transactions_excel.xlsx")
-#     operations_list = get_xlsx_transactions(file_with_operations)
+#     operations_list = get_xlsx_data(file_with_operations)
 #     print(operations_list[0])
 
 
@@ -192,7 +192,6 @@ def count_operations_by_category(operations_list_for_count: list, categories_lis
         logger.error(f"Произошла ошибка: {ex}")
 
 
-# # Пример использования функции
 # if __name__ == "__main__":
 #     operations_list = [
 #         {"description": "Оплата коммунальных услуг"},
@@ -205,5 +204,22 @@ def count_operations_by_category(operations_list_for_count: list, categories_lis
 #
 #     result = count_operations_by_category(operations_list, categories)
 #     print(result)
+
+
+############################################################################################
+def read_user_settings(file_path: str) -> dict:
+    """Функция для получения курса акций из входящего списка акций."""
+    with open(file_path, "r") as f:
+        settings = json.load(f)
+    return settings
+
+
+# if __name__ == "__main__":
+#     user_settings = read_user_settings(
+#         os.path.join(os.path.dirname(os.path.dirname(__file__)), "data/user_settings.json")
+#     )
+#     currencies = user_settings.get("user_currencies")
+#     stocks = user_settings.get("user_stocks")
+#     print(currencies, stocks)
 
 ############################################################################################

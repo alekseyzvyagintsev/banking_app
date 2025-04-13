@@ -6,7 +6,7 @@ import requests
 from dotenv import load_dotenv
 
 from src.logging_external_api import logger
-from src.utils import get_json_transactions
+from src.utils import read_user_settings
 
 load_dotenv()
 
@@ -39,12 +39,11 @@ def returns_the_transaction_amount(transaction: Any) -> Any:
                 }
                 logger.info("Получаем ответ от сервера")
                 response = requests.get(url, headers=token, params=params)
-                status_code = response.status_code
-                if status_code == 200:
+                if response.status_code == 200:
                     result = response.json()
                     logger.info(f"Положительный ответ получен: {result}")
                     return result.get("result")
-                elif status_code == 500:
+                elif response.status_code == 500:
                     logger.error(Exception("Server Error"))
                     raise Exception("Server Error")
                 else:
@@ -57,11 +56,84 @@ def returns_the_transaction_amount(transaction: Any) -> Any:
         return ""
 
 
-if __name__ == "__main__":
-    file_with_operations = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "operations.json")
-    operations_list = get_json_transactions(file_with_operations)
-    get_amount: Any = returns_the_transaction_amount(operations_list[1])
-    print(operations_list[1])
-    print(get_amount)
+# if __name__ == "__main__":
+#     file_with_operations = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "operations.json")
+#     operations_list = get_json_data(file_with_operations)
+#     get_amount: Any = returns_the_transaction_amount(operations_list[1])
+#     print(operations_list[1])
+#     print(get_amount)
 
+
+############################################################################################
+def fetch_exchange_rates(currencies: list[str]) -> list[dict]:  # [CurrencyRate]:
+    """Функция для получения курса валют из входящего списка валют."""
+    rates = []
+    if not currencies:
+        return rates
+    if not os.getenv("APILAYER_KEY"):
+        raise ValueError("API token is missing")
+    for currency in currencies:
+        logger.info("Получаем ответ от сервера")
+        url = "https://api.apilayer.com/exchangerates_data/latest"
+        token = {"apikey": os.getenv("APILAYER_KEY")}
+        params = {"base": "RUB", "symbols": currency}
+        response = requests.get(url, headers=token, params=params)
+        if response.status_code == 200:
+            logger.info("От сервера получен положительный ответ")
+            rate = response.json().get("rates", {}).get(currency)
+            rates.append({"currency": currency, "rate": rate})
+        elif response.status_code == 500:
+            logger.error(Exception("Server Error"))
+            raise Exception("Server Error")
+        else:
+            logger.error(f"Возникла ошибка: {response.reason}")
+            raise Exception(f"Возникла ошибка: {response.reason}")
+    return rates
+
+
+# if __name__ == '__main__':
+#     user_settings = read_user_settings(
+#         os.path.join(os.path.dirname(os.path.dirname(__file__)),
+#                      "data/user_settings.json")
+#     )
+#     currencies = user_settings.get("user_currencies")
+#     exchange_rates = fetch_exchange_rates(currencies)
+
+
+############################################################################################
+def fetch_stock_prices(stocks: list) -> list[dict]:
+    """Функция для получения курса акций из входящего списка акций."""
+    prices = []
+    if not os.getenv("STOCKDATA_API_KEY"):
+        raise ValueError("API token is missing")
+    if not stocks:
+        return stocks
+    for stock in stocks:
+        try:
+            logger.info("Получаем ответ от сервера")
+            response = requests.get(
+                f"https://api.stockdata.org/v1/data/quote?symbols={stock}&api_token={os.getenv('STOCKDATA_API_KEY')}"
+            )
+            if response.status_code == 200:
+                logger.info("От сервера получен положительный ответ")
+                data = response.json().get("data", [])
+                for item in data:
+                    prices.append({"stock": item["ticker"], "price": item["price"]})
+            elif response.status_code == 500:
+                logger.error(Exception("Server Error"))
+                raise Exception("Server Error")
+        except Exception as ex:
+            logger.error(f"Произошла ошибка: {ex}")
+            raise Exception(f"Произошла ошибка: {ex}")
+
+    return prices
+
+
+if __name__ == "__main__":
+    user_settings = read_user_settings(
+        os.path.join(os.path.dirname(os.path.dirname(__file__)), "data/user_settings.json")
+    )
+    stocks = user_settings.get("user_stocks")
+    exchange_rates = fetch_stock_prices(stocks)
+    print(exchange_rates)
 ############################################################################################
