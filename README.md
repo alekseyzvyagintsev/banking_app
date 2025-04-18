@@ -123,7 +123,7 @@
 
 1. Клонируйте репозиторий
 '''
-git clone https://github.com/alekseyzvyagintsev/src.git
+git clone https://github.com/alekseyzvyagintsev/banking_app.git
 '''
 2. Установите зависимости
 '''
