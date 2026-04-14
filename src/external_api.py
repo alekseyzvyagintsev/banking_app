@@ -56,14 +56,6 @@ def returns_the_transaction_amount(transaction: Any) -> Any:
         return ""
 
 
-# if __name__ == "__main__":
-#     file_with_operations = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "operations.json")
-#     operations_list = get_json_data(file_with_operations)
-#     get_amount: Any = returns_the_transaction_amount(operations_list[1])
-#     print(operations_list[1])
-#     print(get_amount)
-
-
 ############################################################################################
 def fetch_exchange_rates(currencies: list[str]) -> list[dict]:  # [CurrencyRate]:
     """Функция для получения курса валют из входящего списка валют."""
@@ -89,15 +81,6 @@ def fetch_exchange_rates(currencies: list[str]) -> list[dict]:  # [CurrencyRate]
             logger.error(f"Возникла ошибка: {response.reason}")
             raise Exception(f"Возникла ошибка: {response.reason}")
     return rates
-
-
-# if __name__ == '__main__':
-#     user_settings = read_user_settings(
-#         os.path.join(os.path.dirname(os.path.dirname(__file__)),
-#                      "data/user_settings.json")
-#     )
-#     currencies = user_settings.get("user_currencies")
-#     exchange_rates = fetch_exchange_rates(currencies)
 
 
 ############################################################################################
@@ -129,11 +112,4 @@ def fetch_stock_prices(stocks: list) -> list[dict]:
     return prices
 
 
-if __name__ == "__main__":
-    user_settings = read_user_settings(
-        os.path.join(os.path.dirname(os.path.dirname(__file__)), "data/user_settings.json")
-    )
-    stocks = user_settings.get("user_stocks")
-    exchange_rates = fetch_stock_prices(stocks)
-    print(exchange_rates)
 ############################################################################################

@@ -8,8 +8,6 @@ import pandas as pd
 from src.decorators import report_decorator
 from src.logging_reports import logger
 
-# from src.utils import get_xlsx_data
-
 
 @report_decorator()
 def spending_by_category(transactions: pd.DataFrame, category: str, date: Optional[str] = None) -> pd.DataFrame:
@@ -45,15 +43,3 @@ def spending_by_category(transactions: pd.DataFrame, category: str, date: Option
 
 
 ###############################################################################################################
-# if __name__ == "__main__":
-#     # data = {
-#     #     'Дата операции': ['2021-04-10', '2021-03-15', '2021-02-20', '2021-01-01'],
-#     #     'Категория': ['Еда', 'Транспорт', 'Развлечения', 'Еда'],
-#     #     'Сумма операции': [1000, 500, 1500, 800]
-#     # }
-#     # df = pd.DataFrame(data)
-#
-#     path_to_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data/operations.xlsx")
-#     transactions_list = get_xlsx_data(path_to_file)
-#     df = pd.DataFrame(transactions_list)
-#     spending_by_category(df,  'Супермаркеты', '2021-04-10') # Супермаркеты # Еда

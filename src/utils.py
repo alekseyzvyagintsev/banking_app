@@ -44,12 +44,6 @@ def get_json_data(data_file: int | str | bytes) -> list | None:
     return []
 
 
-# if __name__ == "__main__":
-#     file_with_operations = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "operations.json")
-#     operations_list = get_json_data(file_with_operations)
-#     print(operations_list[0])
-
-
 ############################################################################################
 def get_csv_data(data_file: int | str | bytes) -> list | None:
     """
@@ -81,12 +75,6 @@ def get_csv_data(data_file: int | str | bytes) -> list | None:
             return []
     logger.error("Обрабатывать нечего.")
     return []
-
-
-# if __name__ == "__main__":
-#     file_with_operations = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data/transactions.csv")
-#     operations_list = get_csv_data(file_with_operations)
-#     print(operations_list[0])
 
 
 ############################################################################################
@@ -121,12 +109,6 @@ def get_xlsx_data(data_file: int | str | bytes) -> list | None:
     return []
 
 
-# if __name__ == "__main__":
-#     file_with_operations = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data/transactions_excel.xlsx")
-#     operations_list = get_xlsx_data(file_with_operations)
-#     print(operations_list[0])
-
-
 ############################################################################################
 def search_operations(operations_list: list, search_string: str) -> list:
     """
@@ -149,17 +131,6 @@ def search_operations(operations_list: list, search_string: str) -> list:
             logger.error(f"Произошла ошибка: {ex}")
 
     return []
-
-
-# if __name__ == "__main__":
-#     data = [
-#         {"id": 1, "amount": 1000, "description": "Оплата услуг связи"},
-#         {"id": 2, "amount": 500, "description": "Покупка продуктов"},
-#         {"id": 3, "amount": 2000, "description": "Оплата коммунальных услуг"},
-#     ]
-#
-#     search_result = search_operations(data, "услуг")
-#     print(search_result)
 
 
 ############################################################################################
@@ -192,20 +163,6 @@ def count_operations_by_category(operations_list_for_count: list, categories_lis
         logger.error(f"Произошла ошибка: {ex}")
 
 
-# if __name__ == "__main__":
-#     operations_list = [
-#         {"description": "Оплата коммунальных услуг"},
-#         {"description": "Пополнение счета"},
-#         {"description": "Перевод средств на карту"},
-#         {"description": "Оплата услуг связи"}
-#     ]
-#
-#     categories = ["оплата", "перевод", "пополнение"]
-#
-#     result = count_operations_by_category(operations_list, categories)
-#     print(result)
-
-
 ############################################################################################
 def read_user_settings(file_path: str) -> dict:
     """Функция для получения курса акций из входящего списка акций."""
@@ -213,13 +170,5 @@ def read_user_settings(file_path: str) -> dict:
         settings = json.load(f)
     return settings
 
-
-# if __name__ == "__main__":
-#     user_settings = read_user_settings(
-#         os.path.join(os.path.dirname(os.path.dirname(__file__)), "data/user_settings.json")
-#     )
-#     currencies = user_settings.get("user_currencies")
-#     stocks = user_settings.get("user_stocks")
-#     print(currencies, stocks)
 
 ############################################################################################

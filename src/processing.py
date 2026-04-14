@@ -161,19 +161,3 @@ def sort_by_descending(data: List[Dict]) -> List[Dict]:
 
 
 ############################################################################
-# if __name__ == "__main__":
-#
-#     transactions_list = get_xlsx_data(os.path.join(
-#                           os.path.dirname(os.path.dirname(__file__)), "data/operations.xlsx"))
-#     df = pd.DataFrame(transactions_list)
-#
-#     expenses_categories = group_expenses_by_category(df)
-#     print(expenses_categories)
-#
-#     income_categories = group_income_by_category(df)
-#     print(income_categories)
-#
-#     print(f"глобальный {EXPENSES}")
-#     print(f"глобальный {INCOME}")
-#     sorted_list = sort_by_descending(income_categories)
-#     print(sorted_list)

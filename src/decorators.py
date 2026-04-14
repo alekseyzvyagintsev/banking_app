@@ -39,16 +39,6 @@ def log(filename: Any) -> Any:
     return decorator
 
 
-# if __name__ == "__main__":
-#
-#     @log(filename="mylog.txt")
-#     def my_func(value: Any) -> Any:
-#         """Возведение числа в квадрат"""
-#         return value
-#
-#     print(my_func())
-
-
 ######################################################################################################################
 def report_decorator(filename: Optional[str] = None):
     """Декоратор для записи результатов функции в файл.
@@ -86,23 +76,5 @@ def report_decorator(filename: Optional[str] = None):
 
     return decorator
 
-
-######################################################################################################################
-# if __name__ == "__main__":
-#     # Пример использования декоратора без параметра
-#     @report_decorator()
-#     def generate_report():
-#         return "Это тестовый отчет!"
-#
-#
-#     print(generate_report())
-#
-#     # Пример использования декоратора с параметром
-#     @report_decorator("my_report.txt")
-#     def generate_custom_report():
-#         return "Это кастомный отчет!"
-#
-#
-#     print(generate_custom_report())
 
 ######################################################################################################################
