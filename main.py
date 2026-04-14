@@ -4,12 +4,12 @@ from typing import Any
 
 from src.generators import filter_by_currency
 from src.processing import filter_by_state, sort_by_date, filter_by_description
-from src.utils import get_json_data, get_xlsx_transactions, get_csv_data
+from src.utils import get_json_data, get_xlsx_data, get_csv_data
 
 menu_options = {
     1: get_json_data,
     2: get_csv_data,
-    3: get_xlsx_transactions
+    3: get_xlsx_data
 }
 
 choice_out = {
