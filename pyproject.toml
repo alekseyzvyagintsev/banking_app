@@ -1,18 +1,24 @@
-[project]
-name = "src"
+[tool.poetry]
+name = "banking_app"
 version = "0.1.0"
 description = ""
-authors = [
-    {name = "Aleksey Zvyagintsev",email = "alex0236889@yandex.ru        "}
-]
+authors = ["Aleksey Zvyagintsev <alex0236889@gmail.com>"]
 readme = "README.md"
-requires-python = ">=3.12"
-dependencies = [
-]
+package-mode = false
+packages = [{include = "banking_app"}]
+
+[tool.poetry.dependencies]
+python = ">=3.12,<4.0"
+pytest = "^8.3.4"
+poetry-core = "^1.0.0"
+dotenv = "^0.9.9"
+python-dotenv = "^1.0.1"
+pandas = "^2.2.3"
+openpyxl = "^3.1.5"
 
 
 [build-system]
-requires = ["poetry-core>=2.0.0,<3.0.0"]
+requires = ["poetry-core>=1.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.group.lint.dependencies]
@@ -25,6 +31,8 @@ mypy = "^1.14.1"
 
 [tool.poetry.group.dev.dependencies]
 requests = "^2.32.3"
+pytest = "^8.3.4"
+pytest-cov = "^6.0.0"
 
 [tool.mypy]
 disallow_untyped_defs = true

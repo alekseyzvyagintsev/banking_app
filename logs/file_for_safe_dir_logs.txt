@@ -1,0 +1,5 @@
+This file is added to the dir logs so that GitHub does not delete an empty directory.
+This folder is important for creating and storing log files.
+
+Этот файл, добавленный в журналы dir чтобы GitHub не удалил пустой каталог.
+Эта папка важна для создания и хранения log-файлов
